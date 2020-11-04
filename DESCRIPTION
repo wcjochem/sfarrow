@@ -1,0 +1,21 @@
+Package: sfarrow
+Title: Read/write Simple Feature Objects (`sf`) to Parquet Files with Apache Arrow
+Version: 0.1.0
+Date: 2020-11-04
+Authors@R: 
+    person(given = "Chris",
+           family = "Jochem",
+           role = c("aut", "cre"),
+           email = "w.c.jochem@soton.ac.uk")
+Description: An R implementation to read/write between Simple Feature (`sf`) spatial objects to parquet files. Parquet files are an open-source, column-oriented data storage formate from Apache (https://parquet.apache.org/), now popular across programming languages. This implementation converts simple feature list geometries between binary formats for use by `arrow`, and CRS information is maintained in standard metadata formats.
+License: 
+URL: https://github.com/wcjochem/sfarrow
+BugReports: https://github.com/wcjochem/sfarrow/issues
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports:
+    sf,
+    arrow,
+    jsonlite

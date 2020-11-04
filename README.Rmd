@@ -1,0 +1,83 @@
+---
+output:
+  github_document:
+    html_preview: false
+---
+
+```{r setup, include = FALSE}
+  knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/REAsDME-",
+  out.width = "100%"
+)
+```
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# sfarrow: An R implementation to read/write between Simple Feature (`sf`)
+spatial objects to parquet files.
+
+`sfarrow` is an experimental and work-in-progress file for testing how to
+read/write Parquet files from `sf` objects.
+
+Simple features are a popular format for representing spatial vector data using
+`data.frames` and a list-like geometry column, implemented in the R package
+`[sf](https://r-spatial.github.io/sf/)`. Parquet files are an open-source,
+column-oriented data storage formate from Apache
+([https://parquet.apache.org/](https://parquet.apache.org/)) which enable
+efficient read/writing for large files. Parquet files are also becoming popular
+across programming languages and can be used in `R` using the package
+`[arrow](https://github.com/apache/arrow/)`. The `sfarrow` implementation
+translates simple feature data objects and reads/writes Parquet files. A key
+goal is for interoperability of the parquet files (particularly with Python
+`GeoPandas`), so coordinate reference system information is maintained in a
+standard metadata format
+([https://github.com/geopandas/geo-arrow-spec](https://github.com/geopandas/geo-arrow-spec)).
+
+## Installation
+Installation of the `sfarrow` package is through Github:
+
+```{r}
+devtools::install_github("https://github.com/wcjochem/sfarrow@main")
+```
+
+## Basic usage
+
+Reading Parquet data of spatial files created with `GeoPandas`.
+```{r}
+# load Natural Earth low-res dataset. 
+# Created from GeoPandas.to_parquet()
+path <- system.file("extdata", "world.parquet", package = "sfarrow")
+
+world <- st_read_parquet(path)
+
+head(world)
+plot(sf::st_geometry(world))
+```
+
+Writing `sf` objects to Parquet format files.
+```{r}
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+
+st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
+
+# read back into R
+nc_p <- st_read_parquet(file.path(tempdir(), "nc.parquet"))
+
+head(nc_p)
+plot(sf::st_geometry(nc_p))
+```
+
+These Parquet files created with `sfarrow` can be read within Python using `GeoPandas`.
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+nc = geopandas.read_parquet('path/to/file/nc.parquet')
+```
+
+## Acknowledgements
+
+```{r}
+citation("sfarrow")
+```
+This work benefited from the work by developers in the GeoPandas, Arrow, and
+r-spatial teams. Thank you to their excellent, open-source work.
