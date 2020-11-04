@@ -38,8 +38,13 @@ standard metadata format
 ## Installation
 Installation of the `sfarrow` package is through Github:
 
+```{r eval=FALSE}
+devtools::install_github("wcjochem/sfarrow@main")
+```
+
+Load the library to begin using.
 ```{r}
-devtools::install_github("https://github.com/wcjochem/sfarrow@main")
+library(sfarrow)
 ```
 
 ## Basic usage
