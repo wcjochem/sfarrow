@@ -15,8 +15,7 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfarrow: An R implementation to read/write between Simple Feature (`sf`)
-spatial objects to parquet files.
+# sfarrow: An R implementation to read/write between `sf` spatial objects to parquet files
 
 `sfarrow` is an experimental and work-in-progress file for testing how to
 read/write Parquet files from `sf` objects.
