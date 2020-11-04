@@ -22,7 +22,7 @@ create_metadata <- function(df){
   geo_metadata <- list(primary_column = attr(df, "sf_column"),
                        columns = col_meta,
                        schema_version = "0.1.0",
-                       creator = list(library="sf_arrow"))
+                       creator = list(library="sfarrow"))
 
   return(jsonlite::toJSON(geo_metadata, auto_unbox=TRUE))
 }
@@ -67,7 +67,7 @@ encode_wkb <- function(df){
 #' @return object of class \code{sf}
 #'
 #' @examples
-#' # load Natural Earth low-res dataset. Created from GeoPandas.to_parquet()
+#' # load Natural Earth low-res dataset. Created in Python with GeoPandas.to_parquet()
 #' path <- system.file("extdata", package = "sfarrow")
 #'
 #' world <- st_read_parquet(file.path(path, "world.parquet"))

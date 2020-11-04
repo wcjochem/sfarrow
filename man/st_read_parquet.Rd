@@ -35,7 +35,7 @@ Reference for the metadata used:
 the Python \code{GeoPandas} library.
 }
 \examples{
-# load Natural Earth low-res dataset. Created from GeoPandas.to_parquet()
+# load Natural Earth low-res dataset. Created in Python with GeoPandas.to_parquet()
 path <- system.file("extdata", package = "sfarrow")
 
 world <- st_read_parquet(file.path(path, "world.parquet"))

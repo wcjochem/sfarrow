@@ -9,7 +9,7 @@ to read/write Parquet files from `sf` objects.
 Simple features are a popular format for representing spatial vector
 data using `data.frames` and a list-like geometry column, implemented in
 the R package [`sf`](https://r-spatial.github.io/sf/). Parquet files are
-an open-source, column-oriented data storage formate from Apache
+an open-source, column-oriented data storage format from Apache
 (<https://parquet.apache.org/>) which enable efficient read/writing for
 large files. Parquet files are also becoming popular across programming
 languages and can be used in `R` using the package
@@ -40,7 +40,7 @@ Reading Parquet data of spatial files created with `GeoPandas`.
 
 ``` r
 # load Natural Earth low-res dataset. 
-# Created from GeoPandas.to_parquet()
+# Created in Python with GeoPandas.to_parquet()
 path <- system.file("extdata", "world.parquet", package = "sfarrow")
 
 world <- st_read_parquet(path)
