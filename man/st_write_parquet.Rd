@@ -15,7 +15,8 @@ st_write_parquet(obj, dsn, ...)
 }
 \description{
 Convert a simple features spatial object from \code{sf} and
-write to a Parquet file using \code{\link[arrow]{write_parquet}}.
+write to a Parquet file using \code{\link[arrow]{write_parquet}}. Geometry
+columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 }
 \examples{
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))

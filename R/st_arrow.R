@@ -36,6 +36,42 @@ create_metadata <- function(df){
   return(jsonlite::toJSON(geo_metadata, auto_unbox=TRUE))
 }
 
+
+#' Basic checking of key geo metadata columns
+#'
+#' @param metadata list for geo metadata
+validate_metadata <- function(metadata){
+  if(is.null(metadata) | !is.list(metadata)){
+    stop("Error: empty or malformed geo metadata", call. = F)
+  } else{
+    # check for presence of required geo keys
+    req_names <- c("primary_column", "columns")
+    for(n in req_names){
+      if(!n %in% names(metadata)){
+        stop(paste0("Required name: '", n, "' not found in geo metadata"),
+             call. = FALSE)
+      }
+    }
+    # check for presence of required geometry columns info
+    req_geo_names <- c("crs", "encoding")
+    for(c in names(metadata[["columns"]])){
+      geo_col <- metadata[["columns"]][[c]]
+
+      for(ng in req_geo_names){
+        if(!ng %in% names(geo_col)){
+          stop(paste0("Required 'geo' metadata item '", ng, "' not found in ", c),
+               call. = FALSE)
+        }
+        if(geo_col[["encoding"]] != "WKB"){
+          stop("Only well-known binary (WKB) encoding is currently supported.",
+               call. = FALSE)
+        }
+      }
+    }
+  }
+}
+
+
 #' Convert \code{sfc} geometry columns into a WKB binary format
 #'
 #' @param df \code{sf} object
@@ -97,6 +133,9 @@ st_read_parquet <- function(dsn, col_select = NULL,
 
   if(!"geo" %in% names(metadata)){
     stop("No geometry metadata found. Use arrow::read_parquet")
+  } else{
+    geo <- jsonlite::fromJSON(metadata$geo)
+    validate_metadata(geo)
   }
 
   if(!is.null(col_select)){
@@ -105,8 +144,6 @@ st_read_parquet <- function(dsn, col_select = NULL,
   } else{
     tbl <- pq$ReadTable()
   }
-
-  geo <- jsonlite::fromJSON(metadata$geo)
 
   # covert and create sf
   tbl <- data.frame(tbl)
