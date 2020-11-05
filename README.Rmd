@@ -15,9 +15,9 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfarrow: An R implementation to read/write between `sf` spatial objects to parquet files
+# sfarrow: An R implementation to read/write between `sf` spatial objects to Parquet files
 
-`sfarrow` is an experimental and work-in-progress file for testing how to
+`sfarrow` is an experimental and work-in-progress package for testing how to
 read/write Parquet files from `sf` objects.
 
 Simple features are a popular format for representing spatial vector data using
@@ -27,14 +27,19 @@ column-oriented data storage format from Apache
 ([https://parquet.apache.org/](https://parquet.apache.org/)) which enable
 efficient read/writing for large files. Parquet files are also becoming popular
 across programming languages and can be used in `R` using the package
-[`arrow`](https://github.com/apache/arrow/). The `sfarrow` implementation
-translates simple feature data objects and reads/writes Parquet files. A key
-goal is for interoperability of the parquet files (particularly with Python
-`GeoPandas`), so coordinate reference system information is maintained in a
-standard metadata format
+[`arrow`](https://github.com/apache/arrow/). 
+
+The `sfarrow` implementation translates simple feature data objects using WKB
+and reads/writes Parquet files. A key goal of the package is for
+interoperability of the parquet files (particularly with Python `GeoPandas`), so
+coordinate reference system information is maintained in a standard metadata
+format
 ([https://github.com/geopandas/geo-arrow-spec](https://github.com/geopandas/geo-arrow-spec)).
+Note to users: this metadata format is not yet stable for production uses and
+may change in the future.
 
 ## Installation
+
 Installation of the `sfarrow` package is through Github:
 
 ```{r eval=FALSE}
@@ -45,6 +50,14 @@ Load the library to begin using.
 ```{r}
 library(sfarrow)
 ```
+
+### `arrow` package
+
+The installation requires the Arrow library which should be installed with the
+`R` package `arrow` dependency. However, some systems may need to follow
+additional steps to enable full support of that library. Please refer to the
+[`arrow` package
+documentation](https://cran.r-project.org/web/packages/arrow/vignettes/install.html).
 
 ## Basic usage
 
@@ -78,10 +91,15 @@ These Parquet files created with `sfarrow` can be read within Python using `GeoP
 nc = geopandas.read_parquet('path/to/file/nc.parquet')
 ```
 
+## Contributions
+Contributions, questions, ideas, and issue reports are welcome. Please raise an
+issue to discuss or submit a pull request.
+
 ## Acknowledgements
+This work benefited from the work by developers in the GeoPandas, Arrow, and
+r-spatial teams. Thank you to their excellent, open-source work.
 
 ```{r}
 citation("sfarrow")
 ```
-This work benefited from the work by developers in the GeoPandas, Arrow, and
-r-spatial teams. Thank you to their excellent, open-source work.
+
