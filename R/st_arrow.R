@@ -87,7 +87,7 @@ encode_wkb <- function(df){
 
   for(col in geom_cols){
     obj_geo <- sf::st_as_binary(df[[col]])
-    attr(obj_geo, "class") <- c("arrow_binary", attr(obj_geo, "class"))
+    attr(obj_geo, "class") <- c("arrow_binary", "vctrs_vctr", attr(obj_geo, "class"), "list")
     df[[col]] <- obj_geo
   }
   return(df)
