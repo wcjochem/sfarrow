@@ -8,6 +8,15 @@
 #'
 #' @return JSON formatted list with geo-metadata
 create_metadata <- function(df){
+  warning(strwrap("This is an initial implementation of Parquet/Feather file support
+                  and geo metadata. This is tracking version 0.1.0 of the metadata
+                  (https://github.com/geopandas/geo-arrow-spec). This metadata
+                  specification may change and does not yet make stability promises.
+                  We do not yet recommend using this in a production setting unless
+                  you are able to rewrite your Parquet/Feather files.",
+                  prefix = "\n", initial = ""
+         ), call.=FALSE)
+
   # reference: https://github.com/geopandas/geo-arrow-spec
   geom_cols <- lapply(df, function(i) inherits(i, "sfc"))
   geom_cols <- names(which(geom_cols==TRUE))
@@ -126,7 +135,8 @@ st_read_parquet <- function(dsn, col_select = NULL,
 #' Write `sf` object to Parquet file
 #'
 #' @description Convert a simple features spatial object from \code{sf} and
-#'   write to a Parquet file using \code{\link[arrow]{write_parquet}}.
+#'   write to a Parquet file using \code{\link[arrow]{write_parquet}}. Geometry
+#'   columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 #' @param obj object of class \code{sf}
 #' @param dsn data source name. A path and file name with .parquet extension
 #' @param ... additional options to pass to \code{\link[arrow]{write_parquet}}
