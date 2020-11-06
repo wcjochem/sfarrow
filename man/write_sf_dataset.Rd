@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_arrow.R
 \name{write_sf_dataset}
 \alias{write_sf_dataset}
-\title{Write \code{sf} object to an Arrow dataset}
+\title{Write \code{sf} object to an Arrow multi-file dataset}
 \usage{
 write_sf_dataset(
   obj,
@@ -26,7 +26,7 @@ the \code{dplyr::group_vars}}
 \code{arrow::write_dataset}}
 }
 \description{
-Write \code{sf} object to an Arrow dataset
+Write \code{sf} object to an Arrow multi-file dataset
 }
 \details{
 Translate an \code{sf} spatial object to \code{data.frame} with WKB
@@ -53,8 +53,8 @@ list.files(file.path(tempdir(), "ds"), recursive = TRUE)
 # open parquet files from dataset
 ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 
-# create a query
-q <- ds \%>\% filter(group == 1)
+# create a query \%>\% also allowed
+q <- dplyr::filter(ds, group == 1)
 
 # read the dataset (piping syntax also works)
 nc_d <- read_sf_dataset(dataset = q)

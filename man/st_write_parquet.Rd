@@ -29,5 +29,5 @@ nc_p <- st_read_parquet(file.path(tempdir(), "nc.parquet"))
 
 }
 \seealso{
-\code{\link[arrow]{read_parquet}}
+\code{\link[arrow]{write_parquet}}
 }

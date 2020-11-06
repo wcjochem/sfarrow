@@ -20,3 +20,4 @@ Reference for metadata standard:
 \url{https://github.com/geopandas/geo-arrow-spec}. This is compatible with
 \code{GeoPandas} Parquet files.
 }
+\keyword{internal}

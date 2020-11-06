@@ -18,3 +18,4 @@ Convert \code{sfc} geometry columns into a WKB binary format
 \details{
 Allows for more than one geometry column in \code{sfc} format
 }
+\keyword{internal}

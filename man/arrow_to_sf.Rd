@@ -17,3 +17,4 @@ object of \code{sf} with CRS and geometry columns
 \description{
 Helper function to convert 'data.frame' to \code{sf}
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_arrow.R
 \name{read_sf_dataset}
 \alias{read_sf_dataset}
-\title{Read an Arrow dataset and create \code{sf} object}
+\title{Read an Arrow multi-file dataset and create \code{sf} object}
 \usage{
 read_sf_dataset(dataset)
 }
@@ -11,7 +11,7 @@ read_sf_dataset(dataset)
 or an \code{arrow_dplyr_query}}
 }
 \description{
-Read an Arrow dataset and create \code{sf} object
+Read an Arrow multi-file dataset and create \code{sf} object
 }
 \details{
 This function is primarily for use after opening a dataset with
@@ -40,8 +40,8 @@ list.files(file.path(tempdir(), "ds"), recursive = TRUE)
 # open parquet files from dataset
 ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 
-# create a query
-q <- ds \%>\% filter(group == 1)
+# create a query. \%>\% also allowed
+q <- dplyr::filter(ds, group == 1)
 
 # read the dataset (piping syntax also works)
 nc_d <- read_sf_dataset(dataset = q)

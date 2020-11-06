@@ -33,7 +33,7 @@ may change.
 # install from devtools::install_github("wcjochem/sfarrow@main)
 # load the library
 library(sfarrow)
-library(dplyr, quietly = TRUE)
+library(dplyr, warn.conflicts = FALSE)
 ```
 
 ## Reading and writing single files
@@ -150,6 +150,7 @@ it is opened.
 ```{r, tidy=FALSE}
 arrow::open_dataset(file.path(tempdir(), "world_ds"), 
                     partitioning = "continent") %>%
+  filter(continent == "Africa") %>%
   read_sf_dataset()
 ```
 

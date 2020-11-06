@@ -15,3 +15,4 @@ None. Throws an error and stops execution
 \description{
 Basic checking of key geo metadata columns
 }
+\keyword{internal}
