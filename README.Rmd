@@ -88,9 +88,6 @@ plot(sf::st_geometry(nc_p))
 ```
 
 For additional examples please see the vignettes.
-```{r, eval=FALSE}
-vignette(package="sfarrow")
-```
 
 ## Contributions
 Contributions, questions, ideas, and issue reports are welcome. Please raise an
