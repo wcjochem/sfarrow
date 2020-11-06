@@ -179,26 +179,8 @@ st_read_parquet <- function(dsn, col_select = NULL,
 
   # covert and create sf
   tbl <- data.frame(tbl)
-
   tbl <- arrow_to_sf(tbl, geo)
 
-  # geom_cols <- names(geo$columns)
-  # geom_cols <- intersect(colnames(tbl), geom_cols)
-  #
-  # primary_geom <- geo$primary_column
-  #
-  # if(length(geom_cols) < 1){ stop("Malformed file and geo metatdata.") }
-  # if(!primary_geom %in% geom_cols){
-  #   primary_geom <- geom_cols[1]
-  #   warning("Primary geometry column not found, using next available.")
-  # }
-  #
-  # for(col in geom_cols){
-  #   tbl[[col]] <- sf::st_as_sfc(tbl[[col]],
-  #                               crs = sf::st_crs(geo$columns[[col]]$crs))
-  # }
-  #
-  # tbl <- sf::st_sf(tbl, sf_column_name = primary_geom)
   return(tbl)
 }
 
