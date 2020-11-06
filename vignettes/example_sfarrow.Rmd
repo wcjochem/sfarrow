@@ -1,0 +1,155 @@
+---
+title: "Getting started examples"
+output: rmarkdown::html_vignette
+description: Reading/writing with sfarrow and how it works.
+vignette: >
+  %\VignetteIndexEntry{example_sfarrow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`sfarrow` is currently an experimental package. It is designed to help
+read/write spatial vector data in "simple feature" format from/to Parquet files
+which maintaining coordinate reference system information. Essentially, this
+tool is attempting to connect data in [`sf`](https://r-spatial.github.io/sf/)
+and in [`arrow`](https://arrow.apache.org/docs/r/) and it relies on these
+packages for its internal work.
+
+A key goal is to support interoperability of spatial data in Parquet files, so
+`sfarrow` implements a metadata format also used by Python `GeoPandas`,
+described here:
+[https://github.com/geopandas/geo-arrow-spec](https://github.com/geopandas/geo-arrow-spec).
+Note that these metadata are not stable yet, and `sfarrow` will warn you that it
+may change.
+
+```{r setup}
+# install from devtools::install_github("wcjochem/sfarrow@main)
+# load the library
+library(sfarrow)
+library(dplyr, quietly = TRUE)
+```
+
+## Reading and writing single files
+
+A Parquet file (with `.parquet` extension) can be read using `st_read_parquet()`
+and pointing to the file system. This will create an `sf` spatial data object in
+memory.
+
+```{r}
+# read an example dataset created from Python using geopandas
+world <- st_read_parquet(system.file("extdata", "world.parquet", package = "sfarrow"))
+
+class(world)
+head(world)
+plot(sf::st_geometry(world))
+```
+
+Similarly, a Parquet file can be written from an `sf` object using
+`st_write_parquet()` and specifying a path to the new file. Non-spatial objects
+cannot be written with `sfarrow`, and users should instead use `arrow`.
+
+```{r}
+# output the file to a new location
+# note the warning about possible future changes in metadata.
+st_write_parquet(world, dsn = file.path(tempdir(), "new_world.parquet"))
+```
+
+## Partitioned datasets
+
+While reading/writing a Parquet file is nice, the real power of `arrow` comes
+from splitting big datasets into multiple files, or partitions, based on
+criteria that make it faster to query. There is currently basic support in
+`sfarrow` for multi-file spatial datasets. For additional dataset querying
+options, see the `arrow`
+[documentation](https://arrow.apache.org/docs/r/articles/dataset.html).
+
+### Querying and reading Datasets
+`sfarrow` accesses `arrows`'s `dplyr` interface to explore partitioned, Arrow
+datasets. 
+
+For this example we will use a dataset which was created by randomly splitting
+the nc.shp file first into three groups and then further partitioning into two
+more random groups. This creates a nested set of files.
+```{r message=FALSE, warning=FALSE, include=FALSE}
+devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
+```
+
+```{r}
+# devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
+twee(system.file("extdata", "ds", package = "sfarrow"))
+```
+
+The file tree is showing that the data were partitioned by the variables
+"split1" and "split2". Those are the column names that were used for the random
+splits. This partitioning is in ["Hive style"](https://hive.apache.org/) where
+the partitioning variables are in the paths.
+
+The first step is to open the Dataset using `arrow`.
+
+```{r}
+ds <- arrow::open_dataset(system.file("extdata", "ds", package="sfarrow"))
+```
+
+For small datasets (as in the example) we can read the entire set of files into
+an `sf` object.
+
+```{r}
+nc_ds <- read_sf_dataset(ds)
+
+head(nc_ds)
+```
+
+With large datasets, more often we will want query them and return a reduced set
+of the partitioned records. To create a query, the easiest way is to use
+`dplyr::filter()` on the partitioning (and/or other) variables and
+`dplyr::select()` to subset the columns. `read_sf_dataset()` will then use the
+`arrow_dplyr_query` and call `dplyr::collect()` to extract and then process the
+Arrow Table into `sf`. When using `select()`, if the geometry column is not
+returned, `sfarrow` will throw an error.
+
+```{r, tidy=FALSE}
+nc_d12 <- ds %>% 
+            filter(split1 == 1, split2 == 2) %>%
+            read_sf_dataset()
+
+head(nc_d12)
+plot(sf::st_geometry(nc_d12), col="grey")
+```
+
+### Writing to Datasets
+
+To write an `sf` object into multiple files, we can again construct a query
+using `dplyr::group_by()` to define the partitioning variables. The result is
+then passed to `sfarrow`.
+
+```{r, tidy=FALSE}
+world %>%
+  group_by(continent) %>%
+  write_sf_dataset(file.path(tempdir(), "world_ds"), 
+                   format = "parquet",
+                   hive_style = FALSE)
+```
+
+In this example we are not using Hive style. This results in the partitioning
+variable not being in the folder paths.
+
+```{r}
+twee(file.path(tempdir(), "world_ds"))
+```
+
+To read this style of Dataset, we must specify the partitioning variables when
+it is opened.
+
+```{r, tidy=FALSE}
+arrow::open_dataset(file.path(tempdir(), "world_ds"), 
+                    partitioning = "continent") %>%
+  read_sf_dataset()
+```
+
