@@ -7,6 +7,7 @@
 #'   \code{GeoPandas} Parquet files.
 #'
 #' @return JSON formatted list with geo-metadata
+#' @keywords internal
 create_metadata <- function(df){
   warning(strwrap("This is an initial implementation of Parquet/Feather file support
                   and geo metadata. This is tracking version 0.1.0 of the metadata
@@ -41,6 +42,7 @@ create_metadata <- function(df){
 #'
 #' @param metadata list for geo metadata
 #' @return None. Throws an error and stops execution
+#' @keywords internal
 validate_metadata <- function(metadata){
   if(is.null(metadata) | !is.list(metadata)){
     stop("Error: empty or malformed geo metadata", call. = F)
@@ -80,6 +82,7 @@ validate_metadata <- function(metadata){
 #' @details Allows for more than one geometry column in \code{sfc} format
 #'
 #' @return \code{data.frame} with binary geometry column(s)
+#' @keywords internal
 encode_wkb <- function(df){
   geom_cols <- lapply(df, function(i) inherits(i, "sfc"))
   geom_cols <- names(which(geom_cols==TRUE))
@@ -101,6 +104,7 @@ encode_wkb <- function(df){
 #' @param metadata \code{list} of validated geo metadata
 #'
 #' @return object of \code{sf} with CRS and geometry columns
+#' @keywords internal
 arrow_to_sf <- function(tbl, metadata){
   geom_cols <- names(metadata$columns)
   geom_cols <- intersect(colnames(tbl), geom_cols)
@@ -195,7 +199,7 @@ st_read_parquet <- function(dsn, col_select = NULL,
 #' @param dsn data source name. A path and file name with .parquet extension
 #' @param ... additional options to pass to \code{\link[arrow]{write_parquet}}
 #'
-#' @seealso \code{\link[arrow]{read_parquet}}
+#' @seealso \code{\link[arrow]{write_parquet}}
 #'
 #' @examples
 #' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
@@ -227,7 +231,7 @@ st_write_parquet <- function(obj, dsn, ...){
 }
 
 
-#' Read an Arrow dataset and create \code{sf} object
+#' Read an Arrow multi-file dataset and create \code{sf} object
 #'
 #' @param dataset a \code{Dataset} object created by \code{arrow::open_dataset}
 #'   or an \code{arrow_dplyr_query}
@@ -260,8 +264,8 @@ st_write_parquet <- function(obj, dsn, ...){
 #' # open parquet files from dataset
 #' ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 #'
-#' # create a query
-#' q <- ds %>% filter(group == 1)
+#' # create a query. %>% also allowed
+#' q <- dplyr::filter(ds, group == 1)
 #'
 #' # read the dataset (piping syntax also works)
 #' nc_d <- read_sf_dataset(dataset = q)
@@ -298,7 +302,7 @@ read_sf_dataset <- function(dataset){
 }
 
 
-#' Write \code{sf} object to an Arrow dataset
+#' Write \code{sf} object to an Arrow multi-file dataset
 #'
 #' @param obj object of class \code{sf}
 #' @param path string path referencing a directory for the output
@@ -334,8 +338,8 @@ read_sf_dataset <- function(dataset){
 #' # open parquet files from dataset
 #' ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 #'
-#' # create a query
-#' q <- ds %>% filter(group == 1)
+#' # create a query %>% also allowed
+#' q <- dplyr::filter(ds, group == 1)
 #'
 #' # read the dataset (piping syntax also works)
 #' nc_d <- read_sf_dataset(dataset = q)

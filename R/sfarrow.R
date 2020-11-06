@@ -24,5 +24,6 @@
 #' Group at the University of Southampton(\url{https://www.worldpop.org/}).
 #'
 #' @docType package
+#' @keywords internal
 #' @name sfarrow
 NULL
