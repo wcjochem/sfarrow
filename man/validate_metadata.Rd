@@ -9,6 +9,10 @@ validate_metadata(metadata)
 \arguments{
 \item{metadata}{list for geo metadata}
 }
+\value{
+None. Throws an error and stops execution
+}
 \description{
 Basic checking of key geo metadata columns
 }
+\keyword{internal}
