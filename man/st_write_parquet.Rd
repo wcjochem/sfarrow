@@ -19,7 +19,7 @@ write to a Parquet file using \code{\link[arrow]{write_parquet}}. Geometry
 columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 }
 \examples{
-nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
 st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
 

@@ -4,15 +4,16 @@
 \name{sfarrow}
 \alias{sfarrow}
 \title{\code{sfarrow}: An R package for reading/writing simple feature (\code{sf}) objects
-to Parquet files with \code{arrow}}
+from/to Parquet files with \code{arrow}}
 \description{
 Simple features are a popular, standardised way to create spatial vector data
 with a list-type geometry column. Parquet files are standard column-oriented
 files designed by Apache Arrow (\url{https://parquet.apache.org/}) for fast
 read/writes. \code{sfarrow} is designed to support the reading and writing of
-simple features in \code{sf} objects from/to Parquet files (.parquet). A key
-goal of \code{sfarrow} is support interoperability of spatial data in Parquet
-files between \code{R} and \code{Python}.
+simple features in \code{sf} objects from/to Parquet files (.parquet) within
+\code{R}. A key goal of \code{sfarrow} is to support interoperability of
+spatial data in Parquet files between \code{R} and \code{Python} through the
+use of standardised metadata.
 }
 \section{Metadata}{
 
