@@ -21,7 +21,8 @@ stored in standard metadata tables within the Parquet files. The metadata are
 based on a standard representation (Version 0.1.0, reference:
 \url{https://github.com/geopandas/geo-arrow-spec}). This is compatible with
 the format used by the Python library \code{GeoPandas} for read/writing
-Parquet files.
+Parquet files. Note to users: this metadata format is not yet stable for
+production uses and may change in the future.
 }
 
 \section{Credits}{

@@ -15,25 +15,25 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfarrow: An R implementation to read/write between `sf` spatial objects to Parquet files
+# sfarrow: An R implementation to read/write  `sf` spatial objects from/to Parquet files
 
 `sfarrow` is an experimental and work-in-progress package for testing how to
-read/write Parquet files from `sf` objects.
+read/write Parquet files with `sf` objects in `R`.
 
 Simple features are a popular format for representing spatial vector data using
 `data.frames` and a list-like geometry column, implemented in the R package
 [`sf`](https://r-spatial.github.io/sf/). Parquet files are an open-source,
 column-oriented data storage format from Apache
 ([https://parquet.apache.org/](https://parquet.apache.org/)) which enable
-efficient read/writing for large files. Parquet files are also becoming popular
+efficient read/writing for large files. Parquet files are becoming popular
 across programming languages and can be used in `R` using the package
-[`arrow`](https://github.com/apache/arrow/). 
+[`arrow`](https://github.com/apache/arrow/).
 
-The `sfarrow` implementation translates simple feature data objects using WKB
-and reads/writes Parquet files. A key goal of the package is for
-interoperability of the parquet files (particularly with Python `GeoPandas`), so
-coordinate reference system information is maintained in a standard metadata
-format
+The `sfarrow` implementation translates simple feature data objects using
+well-known binary (WKB) format for geometry and reads/writes Parquet files. A
+key goal of the package is for interoperability of the Parquet files
+(particularly with Python `GeoPandas`), so coordinate reference system
+information is maintained in a standard metadata format 
 ([https://github.com/geopandas/geo-arrow-spec](https://github.com/geopandas/geo-arrow-spec)).
 Note to users: this metadata format is not yet stable for production uses and
 may change in the future.
@@ -46,7 +46,7 @@ Installation of the `sfarrow` package is through Github:
 devtools::install_github("wcjochem/sfarrow@main")
 ```
 
-Load the library to begin using.
+Load the library to begin using
 ```{r}
 library(sfarrow)
 ```
@@ -56,15 +56,15 @@ library(sfarrow)
 The installation requires the Arrow library which should be installed with the
 `R` package `arrow` dependency. However, some systems may need to follow
 additional steps to enable full support of that library. Please refer to the
-[`arrow` package
-documentation](https://cran.r-project.org/web/packages/arrow/vignettes/install.html).
+`arrow`
+[documentation](https://cran.r-project.org/web/packages/arrow/vignettes/install.html).
 
 ## Basic usage
 
-Reading Parquet data of spatial files created with `GeoPandas`.
+Reading Parquet data of spatial files created with Python `GeoPandas`.
 ```{r}
 # load Natural Earth low-res dataset. 
-# Created in Python with GeoPandas.to_parquet()
+# Created in Python with geopandas.to_parquet()
 path <- system.file("extdata", "world.parquet", package = "sfarrow")
 
 world <- st_read_parquet(path)
@@ -73,9 +73,10 @@ head(world)
 plot(sf::st_geometry(world))
 ```
 
-Writing `sf` objects to Parquet format files.
+Writing `sf` objects to Parquet format files. These Parquet files created with
+`sfarrow` can be read within Python using `GeoPandas`.
 ```{r}
-nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet=TRUE)
 
 st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
 
@@ -86,9 +87,9 @@ head(nc_p)
 plot(sf::st_geometry(nc_p))
 ```
 
-These Parquet files created with `sfarrow` can be read within Python using `GeoPandas`.
-```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
-nc = geopandas.read_parquet('path/to/file/nc.parquet')
+For additional examples please see the vignettes.
+```{r, eval=FALSE}
+vignette(package="sfarrow")
 ```
 
 ## Contributions
@@ -97,9 +98,5 @@ issue to discuss or submit a pull request.
 
 ## Acknowledgements
 This work benefited from the work by developers in the GeoPandas, Arrow, and
-r-spatial teams. Thank you to their excellent, open-source work.
-
-```{r}
-citation("sfarrow")
-```
+r-spatial teams. Thank you to the teams for their excellent, open-source work.
 
