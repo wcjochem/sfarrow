@@ -198,7 +198,7 @@ st_read_parquet <- function(dsn, col_select = NULL,
 #' @seealso \code{\link[arrow]{read_parquet}}
 #'
 #' @examples
-#' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 #'
 #' st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
 #'

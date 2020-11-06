@@ -1,6 +1,6 @@
 Package: sfarrow
 Title: Read/write Simple Feature Objects (`sf`) to Parquet Files with Apache Arrow
-Version: 0.1.1
+Version: 0.2.0
 Date: 2020-11-05
 Authors@R: 
     person(given = "Chris",
@@ -20,3 +20,7 @@ Imports:
     arrow,
     jsonlite,
     dplyr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
