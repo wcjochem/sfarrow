@@ -132,9 +132,9 @@ arrow_to_sf <- function(tbl, metadata){
 #' @description Read a Parquet file. Uses standard metadata information to
 #'   identify geometry columns and coordinate reference system information.
 #' @param dsn character file path to a data source
-#' @param col_select. a character vector of column names to keep. Default is
+#' @param col_select A character vector of column names to keep. Default is
 #'   \code{NULL} which returns all columns
-#' @param props additional \code{\link[arrow]{ParquetReaderProperties}}
+#' @param props Now deprecated in \code{\link[arrow]{read_parquet}}.
 #' @param ... additional parameters to pass to
 #'   \code{\link[arrow]{ParquetFileReader}}
 #'
@@ -158,12 +158,14 @@ arrow_to_sf <- function(tbl, metadata){
 #'
 #' @export
 st_read_parquet <- function(dsn, col_select = NULL,
-                            props = arrow::ParquetReaderProperties$create(), ...){
+                            props = NULL, ...){
   if(missing(dsn)){
     stop("Please provide a data source")
   }
 
-  pq <- arrow::ParquetFileReader$create(dsn, props = props, ...)
+  if(!is.null(props)){ warning("'props' is deprecated in `arrow`. See arrow::ParquetFileWriter.") }
+
+  pq <- arrow::ParquetFileReader$create(dsn, ...)
   schema <- pq$GetSchema()
   metadata <- schema$metadata
 
@@ -270,7 +272,7 @@ st_write_parquet <- function(obj, dsn, ...){
 #' # read the dataset (piping syntax also works)
 #' nc_d <- read_sf_dataset(dataset = q)
 #'
-#' head(nc_d)
+#' nc_d
 #' plot(sf::st_geometry(nc_d))
 #'
 #' @export
@@ -344,7 +346,7 @@ read_sf_dataset <- function(dataset){
 #' # read the dataset (piping syntax also works)
 #' nc_d <- read_sf_dataset(dataset = q)
 #'
-#' head(nc_d)
+#' nc_d
 #' plot(sf::st_geometry(nc_d))
 #'
 #' @export
