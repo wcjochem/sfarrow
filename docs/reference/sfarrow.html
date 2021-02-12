@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>sfarrow: An R package for reading/writing simple feature (sf) objects
-from/to Parquet files with arrow — sfarrow • sfarrow</title>
+<title>sfarrow: An R package for reading/writing simple feature (sf)
+objects from/to Arrow parquet/feather files with arrow — sfarrow • sfarrow</title>
 
 
 <!-- jquery -->
@@ -40,16 +40,16 @@ from/to Parquet files with arrow — sfarrow • sfarrow</title>
 
 
 
-<meta property="og:title" content="sfarrow: An R package for reading/writing simple feature (sf) objects
-from/to Parquet files with arrow — sfarrow" />
+<meta property="og:title" content="sfarrow: An R package for reading/writing simple feature (sf)
+objects from/to Arrow parquet/feather files with arrow — sfarrow" />
 <meta property="og:description" content="Simple features are a popular, standardised way to create spatial vector data
 with a list-type geometry column. Parquet files are standard column-oriented
 files designed by Apache Arrow (https://parquet.apache.org/) for fast
 read/writes. sfarrow is designed to support the reading and writing of
-simple features in sf objects from/to Parquet files (.parquet) within
-R. A key goal of sfarrow is to support interoperability of
-spatial data in Parquet files between R and Python through the
-use of standardised metadata." />
+simple features in sf objects from/to Parquet files (.parquet) and
+Feather files (.feather) within R. A key goal of sfarrow is to
+support interoperability of spatial data in files between R and
+Python through the use of standardised metadata." />
 
 
 
@@ -81,7 +81,7 @@ use of standardised metadata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -132,8 +132,8 @@ use of standardised metadata." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>sfarrow</code>: An R package for reading/writing simple feature (<code>sf</code>) objects
-from/to Parquet files with <code>arrow</code></h1>
+    <h1><code>sfarrow</code>: An R package for reading/writing simple feature (<code>sf</code>)
+objects from/to Arrow parquet/feather files with <code>arrow</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/wcjochem/sfarrow/blob/master/R/sfarrow.R'><code>R/sfarrow.R</code></a></small>
     <div class="hidden name"><code>sfarrow.Rd</code></div>
     </div>
@@ -143,10 +143,10 @@ from/to Parquet files with <code>arrow</code></h1>
 with a list-type geometry column. Parquet files are standard column-oriented
 files designed by Apache Arrow (<a href='https://parquet.apache.org/'>https://parquet.apache.org/</a>) for fast
 read/writes. <code>sfarrow</code> is designed to support the reading and writing of
-simple features in <code>sf</code> objects from/to Parquet files (.parquet) within
-<code>R</code>. A key goal of <code>sfarrow</code> is to support interoperability of
-spatial data in Parquet files between <code>R</code> and <code>Python</code> through the
-use of standardised metadata.</p>
+simple features in <code>sf</code> objects from/to Parquet files (.parquet) and
+Feather files (.feather) within <code>R</code>. A key goal of <code>sfarrow</code> is to
+support interoperability of spatial data in files between <code>R</code> and
+<code>Python</code> through the use of standardised metadata.</p>
     </div>
 
 
@@ -156,12 +156,12 @@ use of standardised metadata.</p>
     
 
 <p>Coordinate reference and geometry field information for <code>sf</code> objects are
-stored in standard metadata tables within the Parquet files. The metadata are
-based on a standard representation (Version 0.1.0, reference:
+stored in standard metadata tables within the files. The metadata are based
+on a standard representation (Version 0.1.0, reference:
 <a href='https://github.com/geopandas/geo-arrow-spec'>https://github.com/geopandas/geo-arrow-spec</a>). This is compatible with
 the format used by the Python library <code>GeoPandas</code> for read/writing
-Parquet files. Note to users: this metadata format is not yet stable for
-production uses and may change in the future.</p>
+Parquet/Feather files. Note to users: this metadata format is not yet stable
+for production uses and may change in the future.</p>
     <h2 class="hasAnchor" id="credits"><a class="anchor" href="#credits"></a>Credits</h2>
 
     

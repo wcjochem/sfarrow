@@ -73,7 +73,7 @@ identify geometry columns and coordinate reference system information." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -134,12 +134,7 @@ identify geometry columns and coordinate reference system information." />
 identify geometry columns and coordinate reference system information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_read_parquet</span><span class='op'>(</span>
-  <span class='va'>dsn</span>,
-  col_select <span class='op'>=</span> <span class='cn'>NULL</span>,
-  props <span class='op'>=</span> <span class='fu'>arrow</span><span class='fu'>::</span><span class='va'><a href='https://arrow.apache.org/docs/r//reference/ParquetReaderProperties.html'>ParquetReaderProperties</a></span><span class='op'>$</span><span class='fu'>create</span><span class='op'>(</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>st_read_parquet</span><span class='op'>(</span><span class='va'>dsn</span>, col_select <span class='op'>=</span> <span class='cn'>NULL</span>, props <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,18 +144,18 @@ identify geometry columns and coordinate reference system information.</p>
       <td><p>character file path to a data source</p></td>
     </tr>
     <tr>
+      <th>col_select</th>
+      <td><p>A character vector of column names to keep. Default is
+<code>NULL</code> which returns all columns</p></td>
+    </tr>
+    <tr>
       <th>props</th>
-      <td><p>additional <code><a href='https://arrow.apache.org/docs/r//reference/ParquetReaderProperties.html'>ParquetReaderProperties</a></code></p></td>
+      <td><p>Now deprecated in <code><a href='https://arrow.apache.org/docs/r//reference/read_parquet.html'>read_parquet</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>additional parameters to pass to
 <code><a href='https://arrow.apache.org/docs/r//reference/ParquetFileReader.html'>ParquetFileReader</a></code></p></td>
-    </tr>
-    <tr>
-      <th>col_select.</th>
-      <td><p>a character vector of column names to keep. Default is
-<code>NULL</code> which returns all columns</p></td>
     </tr>
     </table>
 

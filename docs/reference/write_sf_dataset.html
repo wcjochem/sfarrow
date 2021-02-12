@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -207,26 +207,35 @@ partitioning. Allows for <code>dplyr</code> grouped datasets (using
 <span class='co'># read the dataset (piping syntax also works)</span>
 <span class='va'>nc_d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='read_sf_dataset.html'>read_sf_dataset</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 6 features and 15 fields
+<span class='va'>nc_d</span>
+</div><div class='output co'>#&gt; Simple feature collection with 37 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: -81.74107 ymin: 36.16277 xmax: -75.95718 ymax: 36.58965
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.95718 ymax: 36.58965
 #&gt; geographic CRS: NAD27
-#&gt;    AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
-#&gt; 1 0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
-#&gt; 2 0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9
-#&gt; 3 0.062     1.547  1834    1834      Camden 37029  37029       15   286     0
-#&gt; 4 0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
-#&gt; 5 0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2
-#&gt; 6 0.153     1.616  1839    1839  Rockingham 37157  37157       79  4449    16
-#&gt;   NWBIR74 BIR79 SID79 NWBIR79 group                       geometry
-#&gt; 1      10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...
-#&gt; 2    1066  1606     3    1197     1 MULTIPOLYGON (((-77.21767 3...
-#&gt; 3     115   350     2     139     1 MULTIPOLYGON (((-76.00897 3...
-#&gt; 4     748  1190     2     844     1 MULTIPOLYGON (((-78.30876 3...
-#&gt; 5     550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...
-#&gt; 6    1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; First 10 features:
+#&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
+#&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
+#&gt; 2  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9
+#&gt; 3  0.062     1.547  1834    1834      Camden 37029  37029       15   286     0
+#&gt; 4  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
+#&gt; 5  0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2
+#&gt; 6  0.153     1.616  1839    1839  Rockingham 37157  37157       79  4449    16
+#&gt; 7  0.143     1.663  1840    1840   Granville 37077  37077       39  1671     4
+#&gt; 8  0.109     1.325  1841    1841      Person 37145  37145       73  1556     4
+#&gt; 9  0.190     2.204  1846    1846     Halifax 37083  37083       42  3608    18
+#&gt; 10 0.044     1.158  1887    1887      Chowan 37041  37041       21   751     1
+#&gt;    NWBIR74 BIR79 SID79 NWBIR79 group                       geometry
+#&gt; 1       10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...
+#&gt; 2     1066  1606     3    1197     1 MULTIPOLYGON (((-77.21767 3...
+#&gt; 3      115   350     2     139     1 MULTIPOLYGON (((-76.00897 3...
+#&gt; 4      748  1190     2     844     1 MULTIPOLYGON (((-78.30876 3...
+#&gt; 5      550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 6     1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 7      930  2074     4    1058     1 MULTIPOLYGON (((-78.74912 3...
+#&gt; 8      613  1790     4     650     1 MULTIPOLYGON (((-78.8068 36...
+#&gt; 9     2365  4463    17    2980     1 MULTIPOLYGON (((-77.33221 3...
+#&gt; 10     368   899     1     491     1 MULTIPOLYGON (((-76.68874 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='write_sf_dataset-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

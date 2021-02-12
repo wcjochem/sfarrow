@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -186,26 +186,35 @@ dataset in order to create <code>sf</code> objects.</p>
 <span class='co'># read the dataset (piping syntax also works)</span>
 <span class='va'>nc_d</span> <span class='op'>&lt;-</span> <span class='fu'>read_sf_dataset</span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 6 features and 15 fields
+<span class='va'>nc_d</span>
+</div><div class='output co'>#&gt; Simple feature collection with 33 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
+#&gt; bbox:           xmin: -83.98855 ymin: 33.94867 xmax: -75.45698 ymax: 36.58965
 #&gt; geographic CRS: NAD27
-#&gt;    AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
-#&gt; 1 0.114     1.442  1825    1825       Ashe 37009  37009        5  1091     1
-#&gt; 2 0.070     2.968  1831    1831  Currituck 37053  37053       27   508     1
-#&gt; 3 0.124     1.428  1837    1837     Stokes 37169  37169       85  1612     1
-#&gt; 4 0.114     1.352  1838    1838    Caswell 37033  37033       17  1035     2
-#&gt; 5 0.153     1.616  1839    1839 Rockingham 37157  37157       79  4449    16
-#&gt; 6 0.072     1.085  1842    1842      Vance 37181  37181       91  2180     4
-#&gt;   NWBIR74 BIR79 SID79 NWBIR79 group                       geometry
-#&gt; 1      10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...
-#&gt; 2     123   830     2     145     1 MULTIPOLYGON (((-76.00897 3...
-#&gt; 3     160  2038     5     176     1 MULTIPOLYGON (((-80.02567 3...
-#&gt; 4     550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...
-#&gt; 5    1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...
-#&gt; 6    1179  2753     6    1492     1 MULTIPOLYGON (((-78.49252 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; First 10 features:
+#&gt;     AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
+#&gt; 1  0.114     1.442  1825    1825       Ashe 37009  37009        5  1091     1
+#&gt; 2  0.070     2.968  1831    1831  Currituck 37053  37053       27   508     1
+#&gt; 3  0.124     1.428  1837    1837     Stokes 37169  37169       85  1612     1
+#&gt; 4  0.114     1.352  1838    1838    Caswell 37033  37033       17  1035     2
+#&gt; 5  0.153     1.616  1839    1839 Rockingham 37157  37157       79  4449    16
+#&gt; 6  0.072     1.085  1842    1842      Vance 37181  37181       91  2180     4
+#&gt; 7  0.064     1.213  1892    1892      Avery 37011  37011        6   781     0
+#&gt; 8  0.086     1.267  1893    1893     Yadkin 37197  37197       99  1269     1
+#&gt; 9  0.128     1.554  1897    1897   Franklin 37069  37069       35  1399     2
+#&gt; 10 0.142     1.640  1913    1913       Nash 37127  37127       64  4021     8
+#&gt;    NWBIR74 BIR79 SID79 NWBIR79 group                       geometry
+#&gt; 1       10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...
+#&gt; 2      123   830     2     145     1 MULTIPOLYGON (((-76.00897 3...
+#&gt; 3      160  2038     5     176     1 MULTIPOLYGON (((-80.02567 3...
+#&gt; 4      550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 5     1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 6     1179  2753     6    1492     1 MULTIPOLYGON (((-78.49252 3...
+#&gt; 7        4   977     0       5     1 MULTIPOLYGON (((-81.94135 3...
+#&gt; 8       65  1568     1      76     1 MULTIPOLYGON (((-80.49554 3...
+#&gt; 9      736  1863     0     950     1 MULTIPOLYGON (((-78.25455 3...
+#&gt; 10    1851  5189     7    2274     1 MULTIPOLYGON (((-78.18693 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='read_sf_dataset-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

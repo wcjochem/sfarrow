@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create standardised geo metadata for Parquet files — create_metadata • sfarrow</title>
+<title>Write sf object to Feather file — st_write_feather • sfarrow</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Create standardised geo metadata for Parquet files — create_metadata" />
-<meta property="og:description" content="Create standardised geo metadata for Parquet files" />
+<meta property="og:title" content="Write sf object to Feather file — st_write_feather" />
+<meta property="og:description" content="Convert a simple features spatial object from sf and
+write to a Feather file using write_feather. Geometry
+columns (type sfc) are converted to well-known binary (WKB) format." />
 
 
 
@@ -123,35 +125,55 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create standardised geo metadata for Parquet files</h1>
+    <h1>Write <code>sf</code> object to Feather file</h1>
     <small class="dont-index">Source: <a href='https://github.com/wcjochem/sfarrow/blob/master/R/st_arrow.R'><code>R/st_arrow.R</code></a></small>
-    <div class="hidden name"><code>create_metadata.Rd</code></div>
+    <div class="hidden name"><code>st_write_feather.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create standardised geo metadata for Parquet files</p>
+    <p>Convert a simple features spatial object from <code>sf</code> and
+write to a Feather file using <code><a href='https://arrow.apache.org/docs/r//reference/write_feather.html'>write_feather</a></code>. Geometry
+columns (type <code>sfc</code>) are converted to well-known binary (WKB) format.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_metadata</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>st_write_feather</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>dsn</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
+      <th>obj</th>
       <td><p>object of class <code>sf</code></p></td>
+    </tr>
+    <tr>
+      <th>dsn</th>
+      <td><p>data source name. A path and file name with .parquet extension</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional options to pass to <code><a href='https://arrow.apache.org/docs/r//reference/write_feather.html'>write_feather</a></code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>JSON formatted list with geo-metadata</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/write_feather.html'>write_feather</a></code></p></div>
 
-    <p>Reference for metadata standard:
-<a href='https://github.com/geopandas/geo-arrow-spec'>https://github.com/geopandas/geo-arrow-spec</a>. This is compatible with
-<code>GeoPandas</code> Parquet files.</p>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
+<span class='fu'>st_write_feather</span><span class='op'>(</span>obj<span class='op'>=</span><span class='va'>nc</span>, dsn<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"nc.feather"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: This is an initial implementation of Parquet/Feather file support and</span>
+#&gt; <span class='warning'>geo metadata. This is tracking version 0.1.0 of the metadata</span>
+#&gt; <span class='warning'>(https://github.com/geopandas/geo-arrow-spec). This metadata</span>
+#&gt; <span class='warning'>specification may change and does not yet make stability promises.  We</span>
+#&gt; <span class='warning'>do not yet recommend using this in a production setting unless you are</span>
+#&gt; <span class='warning'>able to rewrite your Parquet/Feather files.</span></div><div class='input'>
+<span class='co'># In Python, read the new file with geopandas.read_feather(...)</span>
+
+<span class='va'>nc_f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read_feather.html'>st_read_feather</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"nc.feather"</span><span class='op'>)</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
