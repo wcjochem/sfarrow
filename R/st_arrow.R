@@ -191,6 +191,59 @@ st_read_parquet <- function(dsn, col_select = NULL,
 }
 
 
+#' Read a Feather file to \code{sf} object
+#'
+#' @description Read a Feather file. Uses standard metadata information to
+#'   identify geometry columns and coordinate reference system information.
+#' @param dsn character file path to a data source
+#' @param col_select A character vector of column names to keep. Default is
+#'   \code{NULL} which returns all columns
+#' @param ... additional parameters to pass to
+#'   \code{\link[arrow]{FeatherReader}}
+#'
+#' @details Reference for the metadata used:
+#'   \url{https://github.com/geopandas/geo-arrow-spec}. These are standard with
+#'   the Python \code{GeoPandas} library.
+#'
+#' @seealso \code{\link[arrow]{read_feather}}
+#'
+#' @return object of class \code{sf}
+#'
+#' @examples
+#' # load Natural Earth low-res dataset.
+#' # Created in Python with GeoPandas.to_feather()
+#' path <- system.file("extdata", package = "sfarrow")
+#'
+#' world <- st_read_feather(file.path(path, "world.feather"))
+#'
+#' world
+#' plot(sf::st_geometry(world))
+#'
+#' @export
+st_read_feather <- function(dsn, col_select = NULL, ...){
+  if(missing(dsn)){
+    stop("Please provide a data source")
+  }
+
+  f <- arrow::read_feather(dsn, col_select, as_data_frame = FALSE, ...)
+  schema <- f$schema
+  metadata <- schema$metadata
+
+  if(!"geo" %in% names(metadata)){
+    stop("No geometry metadata found. Use arrow::read_parquet")
+  } else{
+    geo <- jsonlite::fromJSON(metadata$geo)
+    validate_metadata(geo)
+  }
+
+  # covert and create sf
+  tbl <- data.frame(f)
+  tbl <- arrow_to_sf(tbl, geo)
+
+  return(tbl)
+}
+
+
 #' Write \code{sf} object to Parquet file
 #'
 #' @description Convert a simple features spatial object from \code{sf} and
@@ -230,6 +283,48 @@ st_write_parquet <- function(obj, dsn, ...){
   tbl$metadata[["geo"]] <- geo_metadata
 
   arrow::write_parquet(tbl, sink = dsn, ...)
+}
+
+
+#' Write \code{sf} object to Feather file
+#'
+#' @description Convert a simple features spatial object from \code{sf} and
+#'   write to a Feather file using \code{\link[arrow]{write_feather}}. Geometry
+#'   columns (type \code{sfc}) are converted to well-known binary (WKB) format.
+#'
+#' @param obj object of class \code{sf}
+#' @param dsn data source name. A path and file name with .parquet extension
+#' @param ... additional options to pass to \code{\link[arrow]{write_feather}}
+#'
+#' @seealso \code{\link[arrow]{write_feather}}
+#'
+#' @examples
+#' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+#'
+#' st_write_feather(obj=nc, dsn=file.path(tempdir(), "nc.feather"))
+#'
+#' # In Python, read the new file with geopandas.read_feather(...)
+#'
+#' nc_f <- st_read_feather(file.path(tempdir(), "nc.feather"))
+#'
+#' @export
+st_write_feather <- function(obj, dsn, ...){
+  if(!inherits(obj, "sf")){
+    stop("Must be sf data format")
+  }
+
+  if(missing(dsn)){
+    stop("Missing output file")
+  }
+
+  geo_metadata <- create_metadata(obj)
+
+  df <- encode_wkb(obj)
+  tbl <- arrow::Table$create(df)
+
+  tbl$metadata[["geo"]] <- geo_metadata
+
+  arrow::write_feather(tbl, sink = dsn, ...)
 }
 
 
