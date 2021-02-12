@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
 <a href="#sfarrow-an-r-implementation-to-readwrite-sf-spatial-objects-fromto-parquet-files" class="anchor"></a>sfarrow: An R implementation to read/write <code>sf</code> spatial objects from/to Parquet files</h1></div>
 <p><code>sfarrow</code> is an experimental and work-in-progress package for testing how to read/write Parquet files with <code>sf</code> objects in <code>R</code>.</p>
 <p>Simple features are a popular format for representing spatial vector data using <code>data.frames</code> and a list-like geometry column, implemented in the R package <a href="https://r-spatial.github.io/sf/"><code>sf</code></a>. Parquet files are an open-source, column-oriented data storage format from Apache (<a href="https://parquet.apache.org/" class="uri">https://parquet.apache.org/</a>) which enable efficient read/writing for large files. Parquet files are becoming popular across programming languages and can be used in <code>R</code> using the package <a href="https://github.com/apache/arrow/"><code>arrow</code></a>.</p>
-<p>The <code>sfarrow</code> implementation translates simple feature data objects using well-known binary (WKB) format for geometry and reads/writes Parquet files. A key goal of the package is for interoperability of the Parquet files (particularly with Python <code>GeoPandas</code>), so coordinate reference system information is maintained in a standard metadata format (<a href="https://github.com/geopandas/geo-arrow-spec" class="uri">https://github.com/geopandas/geo-arrow-spec</a>). Note to users: this metadata format is not yet stable for production uses and may change in the future.</p>
+<p>The <code>sfarrow</code> implementation translates simple feature data objects using well-known binary (WKB) format for geometry and reads/writes Parquet/Feather files. A key goal of the package is for interoperability of the files (particularly with Python <code>GeoPandas</code>), so coordinate reference system information is maintained in a standard metadata format (<a href="https://github.com/geopandas/geo-arrow-spec" class="uri">https://github.com/geopandas/geo-arrow-spec</a>). Note to users: this metadata format is not yet stable for production uses and may change in the future.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>

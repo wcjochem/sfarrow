@@ -1,3 +1,10 @@
+# sfarrow 0.3.0
+
+* New `st_write_feather()` and `st_read_feather()` allow similar functionality
+to read/write to .feather formats with `sf` objects.
+* Updated 
+* Following `arrow` 2.0.0, properties to `st_write_parquet()` are deprecated.
+
 # sfarrow 0.2.0
 
 * New `write_sf_dataset()` and `read_sf_dataset()` to handle partitioned

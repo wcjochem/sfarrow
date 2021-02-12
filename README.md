@@ -17,8 +17,8 @@ languages and can be used in `R` using the package
 
 The `sfarrow` implementation translates simple feature data objects
 using well-known binary (WKB) format for geometry and reads/writes
-Parquet files. A key goal of the package is for interoperability of the
-Parquet files (particularly with Python `GeoPandas`), so coordinate
+Parquet/Feather files. A key goal of the package is for interoperability
+of the files (particularly with Python `GeoPandas`), so coordinate
 reference system information is maintained in a standard metadata format
 (<https://github.com/geopandas/geo-arrow-spec>). Note to users: this
 metadata format is not yet stable for production uses and may change in
