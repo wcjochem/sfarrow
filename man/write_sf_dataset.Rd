@@ -59,7 +59,7 @@ q <- dplyr::filter(ds, group == 1)
 # read the dataset (piping syntax also works)
 nc_d <- read_sf_dataset(dataset = q)
 
-head(nc_d)
+nc_d
 plot(sf::st_geometry(nc_d))
 
 }
