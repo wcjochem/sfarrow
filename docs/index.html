@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -65,7 +65,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/wcjochem/sfarrow/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -84,18 +84,18 @@
 <div id="sfarrow-an-r-implementation-to-readwrite-sf-spatial-objects-fromto-parquet-files" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#sfarrow-an-r-implementation-to-readwrite-sf-spatial-objects-fromto-parquet-files" class="anchor"></a>sfarrow: An R implementation to read/write <code>sf</code> spatial objects from/to Parquet files</h1></div>
-<p><code>sfarrow</code> is an experimental and work-in-progress package for testing how to read/write Parquet files with <code>sf</code> objects in <code>R</code>.</p>
-<p>Simple features are a popular format for representing spatial vector data using <code>data.frames</code> and a list-like geometry column, implemented in the R package <a href="https://r-spatial.github.io/sf/"><code>sf</code></a>. Parquet files are an open-source, column-oriented data storage format from Apache (<a href="https://parquet.apache.org/" class="uri">https://parquet.apache.org/</a>) which enable efficient read/writing for large files. Parquet files are becoming popular across programming languages and can be used in <code>R</code> using the package <a href="https://github.com/apache/arrow/"><code>arrow</code></a>.</p>
-<p>The <code>sfarrow</code> implementation translates simple feature data objects using well-known binary (WKB) format for geometry and reads/writes Parquet/Feather files. A key goal of the package is for interoperability of the files (particularly with Python <code>GeoPandas</code>), so coordinate reference system information is maintained in a standard metadata format (<a href="https://github.com/geopandas/geo-arrow-spec" class="uri">https://github.com/geopandas/geo-arrow-spec</a>). Note to users: this metadata format is not yet stable for production uses and may change in the future.</p>
+<p><code>sfarrow</code> is a package for reading and writing Parquet files with <code>sf</code> objects in <code>R</code>.</p>
+<p>Simple features are a popular format for representing spatial vector data using <code>data.frames</code> and a list-like geometry column, implemented in the R package <a href="https://r-spatial.github.io/sf/"><code>sf</code></a>. Apache Parquet files are an open-source, column-oriented data storage format (<a href="https://parquet.apache.org/" class="uri">https://parquet.apache.org/</a>) which enable efficient read/writing for large files. Parquet files are becoming popular across programming languages and can be used in <code>R</code> using the package <a href="https://github.com/apache/arrow/"><code>arrow</code></a>.</p>
+<p>The <code>sfarrow</code> implementation translates simple feature data objects using well-known binary (WKB) format for geometries and reads/writes Parquet/Feather files. A key goal of the package is for interoperability of the files (particularly with Python <code>GeoPandas</code>), so coordinate reference system information is maintained in a standard metadata format (<a href="https://github.com/geopandas/geo-arrow-spec" class="uri">https://github.com/geopandas/geo-arrow-spec</a>). Note to users: this metadata format is not yet stable for production uses and may change in the future.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Installation of the <code>sfarrow</code> package is through Github:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"wcjochem/sfarrow@main"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"wcjochem/sfarrow@main"</span><span class="op">)</span></code></pre></div>
 <p>Load the library to begin using</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wcjochem/sfarrow">sfarrow</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wcjochem/sfarrow">sfarrow</a></span><span class="op">)</span></code></pre></div>
 <div id="arrow-package" class="section level3">
 <h3 class="hasAnchor">
 <a href="#arrow-package" class="anchor"></a><code>arrow</code> package</h3>
@@ -106,38 +106,47 @@
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <p>Reading Parquet data of spatial files created with Python <code>GeoPandas</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># load Natural Earth low-res dataset. </span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># load Natural Earth low-res dataset. </span>
 <span class="co"># Created in Python with geopandas.to_parquet()</span>
 <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"world.parquet"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span>
 
 <span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/st_read_parquet.html">st_read_parquet</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 6 features and 5 fields</span>
-<span class="co">#&gt; geometry type:  GEOMETRY</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -180 ymin: -18.28799 xmax: 180 ymax: 83.23324</span>
-<span class="co">#&gt; geographic CRS: WGS 84</span>
-<span class="co">#&gt;     pop_est     continent                     name iso_a3 gdp_md_est</span>
-<span class="co">#&gt; 1    920938       Oceania                     Fiji    FJI  8.374e+03</span>
-<span class="co">#&gt; 2  53950935        Africa                 Tanzania    TZA  1.506e+05</span>
-<span class="co">#&gt; 3    603253        Africa                W. Sahara    ESH  9.065e+02</span>
-<span class="co">#&gt; 4  35623680 North America                   Canada    CAN  1.674e+06</span>
-<span class="co">#&gt; 5 326625791 North America United States of America    USA  1.856e+07</span>
-<span class="co">#&gt; 6  18556698          Asia               Kazakhstan    KAZ  4.607e+05</span>
-<span class="co">#&gt;                         geometry</span>
-<span class="co">#&gt; 1 MULTIPOLYGON (((180 -16.067...</span>
-<span class="co">#&gt; 2 POLYGON ((33.90371 -0.95, 3...</span>
-<span class="co">#&gt; 3 POLYGON ((-8.66559 27.65643...</span>
-<span class="co">#&gt; 4 MULTIPOLYGON (((-122.84 49,...</span>
-<span class="co">#&gt; 5 MULTIPOLYGON (((-122.84 49,...</span>
-<span class="co">#&gt; 6 POLYGON ((87.35997 49.21498...</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">world</span>
+<span class="co">#&gt; Simple feature collection with 177 features and 5 fields</span>
+<span class="co">#&gt; Geometry type: GEOMETRY</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;      pop_est     continent                     name iso_a3 gdp_md_est</span>
+<span class="co">#&gt; 1     920938       Oceania                     Fiji    FJI  8.374e+03</span>
+<span class="co">#&gt; 2   53950935        Africa                 Tanzania    TZA  1.506e+05</span>
+<span class="co">#&gt; 3     603253        Africa                W. Sahara    ESH  9.065e+02</span>
+<span class="co">#&gt; 4   35623680 North America                   Canada    CAN  1.674e+06</span>
+<span class="co">#&gt; 5  326625791 North America United States of America    USA  1.856e+07</span>
+<span class="co">#&gt; 6   18556698          Asia               Kazakhstan    KAZ  4.607e+05</span>
+<span class="co">#&gt; 7   29748859          Asia               Uzbekistan    UZB  2.023e+05</span>
+<span class="co">#&gt; 8    6909701       Oceania         Papua New Guinea    PNG  2.802e+04</span>
+<span class="co">#&gt; 9  260580739          Asia                Indonesia    IDN  3.028e+06</span>
+<span class="co">#&gt; 10  44293293 South America                Argentina    ARG  8.794e+05</span>
+<span class="co">#&gt;                          geometry</span>
+<span class="co">#&gt; 1  MULTIPOLYGON (((180 -16.067...</span>
+<span class="co">#&gt; 2  POLYGON ((33.90371 -0.95, 3...</span>
+<span class="co">#&gt; 3  POLYGON ((-8.66559 27.65643...</span>
+<span class="co">#&gt; 4  MULTIPOLYGON (((-122.84 49,...</span>
+<span class="co">#&gt; 5  MULTIPOLYGON (((-122.84 49,...</span>
+<span class="co">#&gt; 6  POLYGON ((87.35997 49.21498...</span>
+<span class="co">#&gt; 7  POLYGON ((55.96819 41.30864...</span>
+<span class="co">#&gt; 8  MULTIPOLYGON (((141.0002 -2...</span>
+<span class="co">#&gt; 9  MULTIPOLYGON (((141.0002 -2...</span>
+<span class="co">#&gt; 10 MULTIPOLYGON (((-68.63401 -...</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/REAsDME-unnamed-chunk-3-1.png" width="100%"></p>
 <p>Writing <code>sf</code> objects to Parquet format files. These Parquet files created with <code>sfarrow</code> can be read within Python using <code>GeoPandas</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/st_write_parquet.html">st_write_parquet</a></span><span class="op">(</span>obj<span class="op">=</span><span class="va">nc</span>, dsn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"nc.parquet"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: This is an initial implementation of Parquet/Feather file support and</span>
@@ -150,27 +159,36 @@
 <span class="co"># read back into R</span>
 <span class="va">nc_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/st_read_parquet.html">st_read_parquet</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"nc.parquet"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">nc_p</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 6 features and 14 fields</span>
-<span class="co">#&gt; geometry type:  MULTIPOLYGON</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965</span>
-<span class="co">#&gt; geographic CRS: NAD27</span>
-<span class="co">#&gt;    AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class="co">#&gt; 1 0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1</span>
-<span class="co">#&gt; 2 0.061     1.231  1827    1827   Alleghany 37005  37005        3   487     0</span>
-<span class="co">#&gt; 3 0.143     1.630  1828    1828       Surry 37171  37171       86  3188     5</span>
-<span class="co">#&gt; 4 0.070     2.968  1831    1831   Currituck 37053  37053       27   508     1</span>
-<span class="co">#&gt; 5 0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9</span>
-<span class="co">#&gt; 6 0.097     1.670  1833    1833    Hertford 37091  37091       46  1452     7</span>
-<span class="co">#&gt;   NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">#&gt; 1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...</span>
-<span class="co">#&gt; 2      10   542     3      12 MULTIPOLYGON (((-81.23989 3...</span>
-<span class="co">#&gt; 3     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...</span>
-<span class="co">#&gt; 4     123   830     2     145 MULTIPOLYGON (((-76.00897 3...</span>
-<span class="co">#&gt; 5    1066  1606     3    1197 MULTIPOLYGON (((-77.21767 3...</span>
-<span class="co">#&gt; 6     954  1838     5    1237 MULTIPOLYGON (((-76.74506 3...</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_p</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">nc_p</span>
+<span class="co">#&gt; Simple feature collection with 100 features and 14 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
+<span class="co">#&gt; Geodetic CRS:  NAD27</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1</span>
+<span class="co">#&gt; 2  0.061     1.231  1827    1827   Alleghany 37005  37005        3   487     0</span>
+<span class="co">#&gt; 3  0.143     1.630  1828    1828       Surry 37171  37171       86  3188     5</span>
+<span class="co">#&gt; 4  0.070     2.968  1831    1831   Currituck 37053  37053       27   508     1</span>
+<span class="co">#&gt; 5  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9</span>
+<span class="co">#&gt; 6  0.097     1.670  1833    1833    Hertford 37091  37091       46  1452     7</span>
+<span class="co">#&gt; 7  0.062     1.547  1834    1834      Camden 37029  37029       15   286     0</span>
+<span class="co">#&gt; 8  0.091     1.284  1835    1835       Gates 37073  37073       37   420     0</span>
+<span class="co">#&gt; 9  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4</span>
+<span class="co">#&gt; 10 0.124     1.428  1837    1837      Stokes 37169  37169       85  1612     1</span>
+<span class="co">#&gt;    NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
+<span class="co">#&gt; 1       10  1364     0      19 MULTIPOLYGON (((-81.47276 3...</span>
+<span class="co">#&gt; 2       10   542     3      12 MULTIPOLYGON (((-81.23989 3...</span>
+<span class="co">#&gt; 3      208  3616     6     260 MULTIPOLYGON (((-80.45634 3...</span>
+<span class="co">#&gt; 4      123   830     2     145 MULTIPOLYGON (((-76.00897 3...</span>
+<span class="co">#&gt; 5     1066  1606     3    1197 MULTIPOLYGON (((-77.21767 3...</span>
+<span class="co">#&gt; 6      954  1838     5    1237 MULTIPOLYGON (((-76.74506 3...</span>
+<span class="co">#&gt; 7      115   350     2     139 MULTIPOLYGON (((-76.00897 3...</span>
+<span class="co">#&gt; 8      254   594     2     371 MULTIPOLYGON (((-76.56251 3...</span>
+<span class="co">#&gt; 9      748  1190     2     844 MULTIPOLYGON (((-78.30876 3...</span>
+<span class="co">#&gt; 10     160  2038     5     176 MULTIPOLYGON (((-80.02567 3...</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/REAsDME-unnamed-chunk-4-1.png" width="100%"></p>
 <p>For additional examples please see the vignettes.</p>
 </div>
