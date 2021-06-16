@@ -17,7 +17,8 @@ output:
 
 # sfarrow: An R implementation to read/write  `sf` spatial objects from/to Parquet files
 
-`sfarrow` is package reading and writing Parquet files with `sf` objects in `R`.
+`sfarrow` is a package for reading and writing Parquet files with `sf` objects
+in `R`.
 
 Simple features are a popular format for representing spatial vector data using
 `data.frames` and a list-like geometry column, implemented in the R package
@@ -68,7 +69,7 @@ path <- system.file("extdata", "world.parquet", package = "sfarrow")
 
 world <- st_read_parquet(path)
 
-head(world)
+world
 plot(sf::st_geometry(world))
 ```
 
@@ -82,7 +83,7 @@ st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
 # read back into R
 nc_p <- st_read_parquet(file.path(tempdir(), "nc.parquet"))
 
-head(nc_p)
+nc_p
 plot(sf::st_geometry(nc_p))
 ```
 

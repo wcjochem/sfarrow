@@ -1,7 +1,7 @@
 Package: sfarrow
 Title: Read/write Simple Feature Objects (`sf`) to Parquet Files with Apache Arrow
-Version: 0.3.0
-Date: 2021-02-12
+Version: 0.4.0
+Date: 2021-06-16
 Authors@R: 
     person(given = "Chris",
            family = "Jochem",
@@ -14,7 +14,7 @@ BugReports: https://github.com/wcjochem/sfarrow/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Imports:
     sf,
     arrow,

@@ -4,11 +4,15 @@
 \alias{read_sf_dataset}
 \title{Read an Arrow multi-file dataset and create \code{sf} object}
 \usage{
-read_sf_dataset(dataset)
+read_sf_dataset(dataset, find_geom = FALSE)
 }
 \arguments{
 \item{dataset}{a \code{Dataset} object created by \code{arrow::open_dataset}
 or an \code{arrow_dplyr_query}}
+
+\item{find_geom}{logical. Only needed when using \code{select} to select a
+subset of columns. Should all available geometry columns be added to to the
+dataset query without being named in the query? Default is \code{FALSE}.}
 }
 \description{
 Read an Arrow multi-file dataset and create \code{sf} object
@@ -16,10 +20,10 @@ Read an Arrow multi-file dataset and create \code{sf} object
 \details{
 This function is primarily for use after opening a dataset with
 \code{arrow::open_dataset}. Users can then query the \code{arrow Dataset}
-using \code{dplyr} methods such as \code{filter}. Passing the resulting
-query to this function will parse the datasets and create an \code{sf}
-object. The function expects consistent geo metadata to be stored with the
-dataset in order to create \code{sf} objects.
+using \code{dplyr} methods such as \code{filter} or \code{select}. Passing
+the resulting query to this function will parse the datasets and create an
+\code{sf} object. The function expects consistent geo metadata to be stored
+with the dataset in order to create \code{sf} objects.
 }
 \examples{
 # read spatial object
