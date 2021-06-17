@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/wcjochem/sfarrow/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -201,7 +201,7 @@ partitioning. Allows for <code>dplyr</code> grouped datasets (using
 <span class='co'># open parquet files from dataset</span>
 <span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>arrow</span><span class='fu'>::</span><span class='fu'><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># create a query %&gt;% also allowed</span>
+<span class='co'># create a query. %&gt;% also allowed</span>
 <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ds</span>, <span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span>
 
 <span class='co'># read the dataset (piping syntax also works)</span>
@@ -209,10 +209,10 @@ partitioning. Allows for <code>dplyr</code> grouped datasets (using
 
 <span class='va'>nc_d</span>
 </div><div class='output co'>#&gt; Simple feature collection with 37 features and 15 fields
-#&gt; geometry type:  MULTIPOLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.95718 ymax: 36.58965
-#&gt; geographic CRS: NAD27
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.95718 ymax: 36.58965
+#&gt; Geodetic CRS:  NAD27
 #&gt; First 10 features:
 #&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 #&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
@@ -235,7 +235,7 @@ partitioning. Allows for <code>dplyr</code> grouped datasets (using
 #&gt; 7      930  2074     4    1058     1 MULTIPOLYGON (((-78.74912 3...
 #&gt; 8      613  1790     4     650     1 MULTIPOLYGON (((-78.8068 36...
 #&gt; 9     2365  4463    17    2980     1 MULTIPOLYGON (((-77.33221 3...
-#&gt; 10     368   899     1     491     1 MULTIPOLYGON (((-76.68874 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; 10     368   899     1     491     1 MULTIPOLYGON (((-76.68874 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='write_sf_dataset-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

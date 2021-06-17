@@ -1,2 +1,4 @@
 ^sfarrow\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
+^docs$

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -65,7 +65,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/wcjochem/sfarrow/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,7 +79,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="example_sfarrow_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started examples</h1>
@@ -92,48 +92,57 @@
 
     
     
-<p><code>sfarrow</code> is currently an experimental package. It is designed to help read/write spatial vector data in “simple feature” format from/to Parquet files which maintaining coordinate reference system information. Essentially, this tool is attempting to connect data in <a href="https://r-spatial.github.io/sf/"><code>sf</code></a> and in <a href="https://arrow.apache.org/docs/r/"><code>arrow</code></a> and it relies on these packages for its internal work.</p>
-<p>A key goal is to support interoperability of spatial data in Parquet files, so <code>sfarrow</code> implements a metadata format also used by Python <code>GeoPandas</code>, described here: <a href="https://github.com/geopandas/geo-arrow-spec">https://github.com/geopandas/geo-arrow-spec</a>. Note that these metadata are not stable yet, and <code>sfarrow</code> will warn you that it may change.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># install from devtools::install_github("wcjochem/sfarrow@main)</span>
+<p><code>sfarrow</code> is designed to help read/write spatial vector data in “simple feature” format from/to Parquet files which maintaining coordinate reference system information. Essentially, this tool is attempting to connect data in <a href="https://r-spatial.github.io/sf/"><code>sf</code></a> and in <a href="https://arrow.apache.org/docs/r/"><code>arrow</code></a> and it relies on these packages for its internal work.</p>
+<p>A key goal is to support interoperability of spatial data in Parquet files. R objects (including <code>sf</code>) can be written to files with <code>arrow</code>; however, these do not necessarily maintain the spatial information or can be read in by Python. <code>sfarrow</code> implements a metadata format also used by Python <code>GeoPandas</code>, described here: <a href="https://github.com/geopandas/geo-arrow-spec">https://github.com/geopandas/geo-arrow-spec</a>. Note that these metadata are not stable yet, and <code>sfarrow</code> will warn you that it may change.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install from devtools::install_github("wcjochem/sfarrow@main)</span>
 <span class="co"># load the library</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wcjochem/sfarrow">sfarrow</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <div id="reading-and-writing-single-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-and-writing-single-files" class="anchor"></a>Reading and writing single files</h2>
-<p>A Parquet file (with <code>.parquet</code> extension) can be read using <code><a href="../reference/st_read_parquet.html">st_read_parquet()</a></code> and pointing to the file system. This will create an <code>sf</code> spatial data object in memory.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># read an example dataset created from Python using geopandas</span>
+<p>A Parquet file (with <code>.parquet</code> extension) can be read using <code><a href="../reference/st_read_parquet.html">st_read_parquet()</a></code> and pointing to the file system. This will create an <code>sf</code> spatial data object in memory which can then be used as normal using functions from <code>sf</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># read an example dataset created from Python using geopandas</span>
 <span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read_parquet.html">st_read_parquet</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"world.parquet"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span>
 <span class="co">#&gt; [1] "sf"         "data.frame"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 6 features and 5 fields</span>
-<span class="co">#&gt; geometry type:  GEOMETRY</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -180 ymin: -18.28799 xmax: 180 ymax: 83.23324</span>
-<span class="co">#&gt; geographic CRS: WGS 84</span>
-<span class="co">#&gt;     pop_est     continent                     name iso_a3 gdp_md_est</span>
-<span class="co">#&gt; 1    920938       Oceania                     Fiji    FJI  8.374e+03</span>
-<span class="co">#&gt; 2  53950935        Africa                 Tanzania    TZA  1.506e+05</span>
-<span class="co">#&gt; 3    603253        Africa                W. Sahara    ESH  9.065e+02</span>
-<span class="co">#&gt; 4  35623680 North America                   Canada    CAN  1.674e+06</span>
-<span class="co">#&gt; 5 326625791 North America United States of America    USA  1.856e+07</span>
-<span class="co">#&gt; 6  18556698          Asia               Kazakhstan    KAZ  4.607e+05</span>
-<span class="co">#&gt;                         geometry</span>
-<span class="co">#&gt; 1 MULTIPOLYGON (((180 -16.067...</span>
-<span class="co">#&gt; 2 POLYGON ((33.90371 -0.95, 3...</span>
-<span class="co">#&gt; 3 POLYGON ((-8.66559 27.65643...</span>
-<span class="co">#&gt; 4 MULTIPOLYGON (((-122.84 49,...</span>
-<span class="co">#&gt; 5 MULTIPOLYGON (((-122.84 49,...</span>
-<span class="co">#&gt; 6 POLYGON ((87.35997 49.21498...</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">world</span>
+<span class="co">#&gt; Simple feature collection with 177 features and 5 fields</span>
+<span class="co">#&gt; Geometry type: GEOMETRY</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;      pop_est     continent                     name iso_a3 gdp_md_est</span>
+<span class="co">#&gt; 1     920938       Oceania                     Fiji    FJI  8.374e+03</span>
+<span class="co">#&gt; 2   53950935        Africa                 Tanzania    TZA  1.506e+05</span>
+<span class="co">#&gt; 3     603253        Africa                W. Sahara    ESH  9.065e+02</span>
+<span class="co">#&gt; 4   35623680 North America                   Canada    CAN  1.674e+06</span>
+<span class="co">#&gt; 5  326625791 North America United States of America    USA  1.856e+07</span>
+<span class="co">#&gt; 6   18556698          Asia               Kazakhstan    KAZ  4.607e+05</span>
+<span class="co">#&gt; 7   29748859          Asia               Uzbekistan    UZB  2.023e+05</span>
+<span class="co">#&gt; 8    6909701       Oceania         Papua New Guinea    PNG  2.802e+04</span>
+<span class="co">#&gt; 9  260580739          Asia                Indonesia    IDN  3.028e+06</span>
+<span class="co">#&gt; 10  44293293 South America                Argentina    ARG  8.794e+05</span>
+<span class="co">#&gt;                          geometry</span>
+<span class="co">#&gt; 1  MULTIPOLYGON (((180 -16.067...</span>
+<span class="co">#&gt; 2  POLYGON ((33.90371 -0.95, 3...</span>
+<span class="co">#&gt; 3  POLYGON ((-8.66559 27.65643...</span>
+<span class="co">#&gt; 4  MULTIPOLYGON (((-122.84 49,...</span>
+<span class="co">#&gt; 5  MULTIPOLYGON (((-122.84 49,...</span>
+<span class="co">#&gt; 6  POLYGON ((87.35997 49.21498...</span>
+<span class="co">#&gt; 7  POLYGON ((55.96819 41.30864...</span>
+<span class="co">#&gt; 8  MULTIPOLYGON (((141.0002 -2...</span>
+<span class="co">#&gt; 9  MULTIPOLYGON (((141.0002 -2...</span>
+<span class="co">#&gt; 10 MULTIPOLYGON (((-68.63401 -...</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="example_sfarrow_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Similarly, a Parquet file can be written from an <code>sf</code> object using <code><a href="../reference/st_write_parquet.html">st_write_parquet()</a></code> and specifying a path to the new file. Non-spatial objects cannot be written with <code>sfarrow</code>, and users should instead use <code>arrow</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># output the file to a new location</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># output the file to a new location</span>
 <span class="co"># note the warning about possible future changes in metadata.</span>
 <span class="fu"><a href="../reference/st_write_parquet.html">st_write_parquet</a></span><span class="op">(</span><span class="va">world</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"new_world.parquet"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: This is an initial implementation of Parquet/Feather file support and</span>
@@ -141,7 +150,7 @@
 <span class="co">#&gt; (https://github.com/geopandas/geo-arrow-spec). This metadata</span>
 <span class="co">#&gt; specification may change and does not yet make stability promises.  We</span>
 <span class="co">#&gt; do not yet recommend using this in a production setting unless you are</span>
-<span class="co">#&gt; able to rewrite your Parquet/Feather files.</span></pre></div>
+<span class="co">#&gt; able to rewrite your Parquet/Feather files.</span></code></pre></div>
 </div>
 <div id="partitioned-datasets" class="section level2">
 <h2 class="hasAnchor">
@@ -152,87 +161,123 @@
 <a href="#querying-and-reading-datasets" class="anchor"></a>Querying and reading Datasets</h3>
 <p><code>sfarrow</code> accesses <code>arrows</code>’s <code>dplyr</code> interface to explore partitioned, Arrow datasets.</p>
 <p>For this example we will use a dataset which was created by randomly splitting the nc.shp file first into three groups and then further partitioning into two more random groups. This creates a nested set of files.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co"># devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")</span>
-<span class="fu">twee</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; -- split1=1</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-5.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-2.parquet</span>
-<span class="co">#&gt; -- split1=2</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-3.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-0.parquet</span>
-<span class="co">#&gt; -- split1=3</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-4.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-1.parquet</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] "split1=1/split2=1/part-5.parquet" "split1=1/split2=2/part-2.parquet"</span>
+<span class="co">#&gt; [3] "split1=2/split2=1/part-3.parquet" "split1=2/split2=2/part-0.parquet"</span>
+<span class="co">#&gt; [5] "split1=3/split2=1/part-4.parquet" "split1=3/split2=2/part-1.parquet"</span></code></pre></div>
 <p>The file tree is showing that the data were partitioned by the variables “split1” and “split2”. Those are the column names that were used for the random splits. This partitioning is in <a href="https://hive.apache.org/">“Hive style”</a> where the partitioning variables are in the paths.</p>
 <p>The first step is to open the Dataset using <code>arrow</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r//reference/open_dataset.html">open_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package<span class="op">=</span><span class="st">"sfarrow"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r//reference/open_dataset.html">open_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package<span class="op">=</span><span class="st">"sfarrow"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>For small datasets (as in the example) we can read the entire set of files into an <code>sf</code> object.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">nc_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">nc_ds</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 6 features and 16 fields</span>
-<span class="co">#&gt; geometry type:  MULTIPOLYGON</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -82.40842 ymin: 35.50681 xmax: -76.69376 ymax: 36.55629</span>
-<span class="co">#&gt; geographic CRS: NAD27</span>
-<span class="co">#&gt;    AREA PERIMETER CNTY_ CNTY_ID     NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class="co">#&gt; 1 0.097     1.670  1833    1833 Hertford 37091  37091       46  1452     7</span>
-<span class="co">#&gt; 2 0.199     1.984  1874    1874   Wilkes 37193  37193       97  3146     4</span>
-<span class="co">#&gt; 3 0.180     2.151  1905    1905   Bertie 37015  37015        8  1324     6</span>
-<span class="co">#&gt; 4 0.059     1.319  1927    1927 Mitchell 37121  37121       61   671     0</span>
-<span class="co">#&gt; 5 0.122     1.516  1932    1932 Caldwell 37027  37027       14  3609     6</span>
-<span class="co">#&gt; 6 0.155     1.781  1947    1947  Iredell 37097  37097       49  4139     4</span>
-<span class="co">#&gt;   NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
-<span class="co">#&gt; 1     954  1838     5    1237      1      1 MULTIPOLYGON (((-76.74506 3...</span>
-<span class="co">#&gt; 2     200  3725     7     222      1      1 MULTIPOLYGON (((-81.02057 3...</span>
-<span class="co">#&gt; 3     921  1616     5    1161      1      1 MULTIPOLYGON (((-76.78307 3...</span>
-<span class="co">#&gt; 4       1   919     2       4      1      1 MULTIPOLYGON (((-82.11885 3...</span>
-<span class="co">#&gt; 5     309  4249     9     360      1      1 MULTIPOLYGON (((-81.32813 3...</span>
-<span class="co">#&gt; 6    1144  5400     5    1305      1      1 MULTIPOLYGON (((-80.72652 3...</span></pre></div>
-<p>With large datasets, more often we will want query them and return a reduced set of the partitioned records. To create a query, the easiest way is to use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code> on the partitioning (and/or other) variables and <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> to subset the columns. <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> will then use the <code>arrow_dplyr_query</code> and call <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::collect()</a></code> to extract and then process the Arrow Table into <code>sf</code>. When using <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>, if the geometry column is not returned, <code>sfarrow</code> will throw an error.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">nc_d12</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span> 
+<span class="va">nc_ds</span>
+<span class="co">#&gt; Simple feature collection with 100 features and 16 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
+<span class="co">#&gt; Geodetic CRS:  NAD27</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt; 1  0.097     1.670  1833    1833  Hertford 37091  37091       46  1452     7</span>
+<span class="co">#&gt; 2  0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146     4</span>
+<span class="co">#&gt; 3  0.180     2.151  1905    1905    Bertie 37015  37015        8  1324     6</span>
+<span class="co">#&gt; 4  0.059     1.319  1927    1927  Mitchell 37121  37121       61   671     0</span>
+<span class="co">#&gt; 5  0.122     1.516  1932    1932  Caldwell 37027  37027       14  3609     6</span>
+<span class="co">#&gt; 6  0.155     1.781  1947    1947   Iredell 37097  37097       49  4139     4</span>
+<span class="co">#&gt; 7  0.066     1.070  1950    1950 Alexander 37003  37003        2  1333     0</span>
+<span class="co">#&gt; 8  0.134     1.755  1958    1958     Burke 37023  37023       12  3573     5</span>
+<span class="co">#&gt; 9  0.094     1.307  1979    1979    Wilson 37195  37195       98  3702    11</span>
+<span class="co">#&gt; 10 0.168     1.995  1988    1988  Buncombe 37021  37021       11  7515     9</span>
+<span class="co">#&gt;    NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
+<span class="co">#&gt; 1      954  1838     5    1237      1      1 MULTIPOLYGON (((-76.74506 3...</span>
+<span class="co">#&gt; 2      200  3725     7     222      1      1 MULTIPOLYGON (((-81.02057 3...</span>
+<span class="co">#&gt; 3      921  1616     5    1161      1      1 MULTIPOLYGON (((-76.78307 3...</span>
+<span class="co">#&gt; 4        1   919     2       4      1      1 MULTIPOLYGON (((-82.11885 3...</span>
+<span class="co">#&gt; 5      309  4249     9     360      1      1 MULTIPOLYGON (((-81.32813 3...</span>
+<span class="co">#&gt; 6     1144  5400     5    1305      1      1 MULTIPOLYGON (((-80.72652 3...</span>
+<span class="co">#&gt; 7      128  1683     2     150      1      1 MULTIPOLYGON (((-81.10889 3...</span>
+<span class="co">#&gt; 8      326  4314    15     407      1      1 MULTIPOLYGON (((-81.81628 3...</span>
+<span class="co">#&gt; 9     1827  4706    13    2330      1      1 MULTIPOLYGON (((-78.06533 3...</span>
+<span class="co">#&gt; 10     930  9956    18    1206      1      1 MULTIPOLYGON (((-82.2581 35...</span></code></pre></div>
+<p>With large datasets, more often we will want query them and return a reduced set of the partitioned records. To create a query, the easiest way is to use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code> on the partitioning (and/or other) variables to subset the rows and <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> to subset the columns. <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> will then use the <code>arrow_dplyr_query</code> and call <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::collect()</a></code> to extract and then process the Arrow Table into <code>sf</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc_d12</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span> 
             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">split1</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">split2</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span>
             <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">nc_d12</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 6 features and 16 fields</span>
-<span class="co">#&gt; geometry type:  MULTIPOLYGON</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -80.02567 ymin: 36.01413 xmax: -76.46035 ymax: 36.55525</span>
-<span class="co">#&gt; geographic CRS: NAD27</span>
-<span class="co">#&gt;    AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class="co">#&gt; 1 0.091     1.284  1835    1835      Gates 37073  37073       37   420     0</span>
-<span class="co">#&gt; 2 0.118     1.421  1836    1836     Warren 37185  37185       93   968     4</span>
-<span class="co">#&gt; 3 0.114     1.352  1838    1838    Caswell 37033  37033       17  1035     2</span>
-<span class="co">#&gt; 4 0.153     1.616  1839    1839 Rockingham 37157  37157       79  4449    16</span>
-<span class="co">#&gt; 5 0.143     1.663  1840    1840  Granville 37077  37077       39  1671     4</span>
-<span class="co">#&gt; 6 0.072     1.085  1842    1842      Vance 37181  37181       91  2180     4</span>
-<span class="co">#&gt;   NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
-<span class="co">#&gt; 1     254   594     2     371      1      2 MULTIPOLYGON (((-76.56251 3...</span>
-<span class="co">#&gt; 2     748  1190     2     844      1      2 MULTIPOLYGON (((-78.30876 3...</span>
-<span class="co">#&gt; 3     550  1253     2     597      1      2 MULTIPOLYGON (((-79.53051 3...</span>
-<span class="co">#&gt; 4    1243  5386     5    1369      1      2 MULTIPOLYGON (((-79.53051 3...</span>
-<span class="co">#&gt; 5     930  2074     4    1058      1      2 MULTIPOLYGON (((-78.74912 3...</span>
-<span class="co">#&gt; 6    1179  2753     6    1492      1      2 MULTIPOLYGON (((-78.49252 3...</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_d12</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span></pre></div>
-<p><img src="example_sfarrow_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<span class="va">nc_d12</span>
+<span class="co">#&gt; Simple feature collection with 15 features and 16 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -83.9547 ymin: 34.82742 xmax: -76.42043 ymax: 36.55525</span>
+<span class="co">#&gt; Geodetic CRS:  NAD27</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt; 1  0.091     1.284  1835    1835      Gates 37073  37073       37   420     0</span>
+<span class="co">#&gt; 2  0.118     1.421  1836    1836     Warren 37185  37185       93   968     4</span>
+<span class="co">#&gt; 3  0.114     1.352  1838    1838    Caswell 37033  37033       17  1035     2</span>
+<span class="co">#&gt; 4  0.153     1.616  1839    1839 Rockingham 37157  37157       79  4449    16</span>
+<span class="co">#&gt; 5  0.143     1.663  1840    1840  Granville 37077  37077       39  1671     4</span>
+<span class="co">#&gt; 6  0.072     1.085  1842    1842      Vance 37181  37181       91  2180     4</span>
+<span class="co">#&gt; 7  0.044     1.158  1887    1887     Chowan 37041  37041       21   751     1</span>
+<span class="co">#&gt; 8  0.069     1.201  1948    1948      Davie 37059  37059       30  1207     1</span>
+<span class="co">#&gt; 9  0.180     2.142  1973    1973    Chatham 37037  37037       19  1646     2</span>
+<span class="co">#&gt; 10 0.207     1.851  1989    1989   Johnston 37101  37101       51  3999     6</span>
+<span class="co">#&gt;    NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
+<span class="co">#&gt; 1      254   594     2     371      1      2 MULTIPOLYGON (((-76.56251 3...</span>
+<span class="co">#&gt; 2      748  1190     2     844      1      2 MULTIPOLYGON (((-78.30876 3...</span>
+<span class="co">#&gt; 3      550  1253     2     597      1      2 MULTIPOLYGON (((-79.53051 3...</span>
+<span class="co">#&gt; 4     1243  5386     5    1369      1      2 MULTIPOLYGON (((-79.53051 3...</span>
+<span class="co">#&gt; 5      930  2074     4    1058      1      2 MULTIPOLYGON (((-78.74912 3...</span>
+<span class="co">#&gt; 6     1179  2753     6    1492      1      2 MULTIPOLYGON (((-78.49252 3...</span>
+<span class="co">#&gt; 7      368   899     1     491      1      2 MULTIPOLYGON (((-76.68874 3...</span>
+<span class="co">#&gt; 8      148  1438     3     177      1      2 MULTIPOLYGON (((-80.45677 3...</span>
+<span class="co">#&gt; 9      591  2398     3     687      1      2 MULTIPOLYGON (((-79.55536 3...</span>
+<span class="co">#&gt; 10    1165  4780    13    1349      1      2 MULTIPOLYGON (((-78.53874 3...</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_d12</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span></code></pre></div>
+<p><img src="example_sfarrow_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p>When using <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> to read only a subset of columns, if the geometry column is not returned, the default behaviour of <code>sfarrow</code> is to throw an error from <code>read_sf_dataset</code>. If you do not need the geometry column for your analyses, then using <code>arrow</code> and not <code>sfarrow</code> should be sufficient. However, setting <code>find_geom = TRUE</code> in <code>read_sf_dataset</code> will read in any geometry columns in the metadata, in addition to the selected columns.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># this command will throw an error</span>
+<span class="co"># no geometry column selected for read_sf_dataset</span>
+<span class="co"># nc_sub &lt;- ds %&gt;% </span>
+<span class="co">#             select('FIPS') %&gt;% # subset of columns</span>
+<span class="co">#             read_sf_dataset()</span>
+
+<span class="co"># set find_geom</span>
+<span class="va">nc_sub</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="st">'FIPS'</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># subset of columns</span>
+            <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span>find_geom <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">nc_sub</span>
+<span class="co">#&gt; Simple feature collection with 100 features and 1 field</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
+<span class="co">#&gt; Geodetic CRS:  NAD27</span>
+<span class="co">#&gt; First 10 features:</span>
+<span class="co">#&gt;     FIPS                       geometry</span>
+<span class="co">#&gt; 1  37091 MULTIPOLYGON (((-76.74506 3...</span>
+<span class="co">#&gt; 2  37193 MULTIPOLYGON (((-81.02057 3...</span>
+<span class="co">#&gt; 3  37015 MULTIPOLYGON (((-76.78307 3...</span>
+<span class="co">#&gt; 4  37121 MULTIPOLYGON (((-82.11885 3...</span>
+<span class="co">#&gt; 5  37027 MULTIPOLYGON (((-81.32813 3...</span>
+<span class="co">#&gt; 6  37097 MULTIPOLYGON (((-80.72652 3...</span>
+<span class="co">#&gt; 7  37003 MULTIPOLYGON (((-81.10889 3...</span>
+<span class="co">#&gt; 8  37023 MULTIPOLYGON (((-81.81628 3...</span>
+<span class="co">#&gt; 9  37195 MULTIPOLYGON (((-78.06533 3...</span>
+<span class="co">#&gt; 10 37021 MULTIPOLYGON (((-82.2581 35...</span></code></pre></div>
 </div>
 <div id="writing-to-datasets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#writing-to-datasets" class="anchor"></a>Writing to Datasets</h3>
 <p>To write an <code>sf</code> object into multiple files, we can again construct a query using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">dplyr::group_by()</a></code> to define the partitioning variables. The result is then passed to <code>sfarrow</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">world</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">world</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/write_sf_dataset.html">write_sf_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span>, 
                    format <span class="op">=</span> <span class="st">"parquet"</span>,
@@ -242,37 +287,25 @@
 <span class="co">#&gt; (https://github.com/geopandas/geo-arrow-spec). This metadata</span>
 <span class="co">#&gt; specification may change and does not yet make stability promises.  We</span>
 <span class="co">#&gt; do not yet recommend using this in a production setting unless you are</span>
-<span class="co">#&gt; able to rewrite your Parquet/Feather files.</span></pre></div>
+<span class="co">#&gt; able to rewrite your Parquet/Feather files.</span></code></pre></div>
 <p>In this example we are not using Hive style. This results in the partitioning variable not being in the folder paths.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu">twee</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; -- Africa</span>
-<span class="co">#&gt;    |__part-0.parquet</span>
-<span class="co">#&gt; -- Antarctica</span>
-<span class="co">#&gt;    |__part-1.parquet</span>
-<span class="co">#&gt; -- Asia</span>
-<span class="co">#&gt;    |__part-2.parquet</span>
-<span class="co">#&gt; -- Europe</span>
-<span class="co">#&gt;    |__part-3.parquet</span>
-<span class="co">#&gt; -- North America</span>
-<span class="co">#&gt;    |__part-4.parquet</span>
-<span class="co">#&gt; -- Oceania</span>
-<span class="co">#&gt;    |__part-5.parquet</span>
-<span class="co">#&gt; -- Seven seas (open ocean)</span>
-<span class="co">#&gt;    |__part-6.parquet</span>
-<span class="co">#&gt; -- South America</span>
-<span class="co">#&gt;    |__part-7.parquet</span></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Africa"                  "Antarctica"             </span>
+<span class="co">#&gt; [3] "Asia"                    "Europe"                 </span>
+<span class="co">#&gt; [5] "North America"           "Oceania"                </span>
+<span class="co">#&gt; [7] "Seven seas (open ocean)" "South America"</span></code></pre></div>
 <p>To read this style of Dataset, we must specify the partitioning variables when it is opened.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r//reference/open_dataset.html">open_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span>, 
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r//reference/open_dataset.html">open_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span>, 
                     partitioning <span class="op">=</span> <span class="st">"continent"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">continent</span> <span class="op">==</span> <span class="st">"Africa"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 51 features and 5 fields</span>
-<span class="co">#&gt; geometry type:  GEOMETRY</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -17.62504 ymin: -34.81917 xmax: 51.13387 ymax: 37.34999</span>
-<span class="co">#&gt; geographic CRS: WGS 84</span>
+<span class="co">#&gt; Geometry type: GEOMETRY</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -17.62504 ymin: -34.81917 xmax: 51.13387 ymax: 37.34999</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; First 10 features:</span>
 <span class="co">#&gt;     pop_est            name iso_a3 gdp_md_est continent</span>
 <span class="co">#&gt; 1  53950935        Tanzania    TZA   150600.0    Africa</span>
@@ -295,7 +328,7 @@
 <span class="co">#&gt; 7  POLYGON ((23.83766 19.58047...</span>
 <span class="co">#&gt; 8  POLYGON ((16.34498 -28.5767...</span>
 <span class="co">#&gt; 9  POLYGON ((28.97826 -28.9556...</span>
-<span class="co">#&gt; 10 POLYGON ((31.19141 -22.2515...</span></pre></div>
+<span class="co">#&gt; 10 POLYGON ((31.19141 -22.2515...</span></code></pre></div>
 </div>
 </div>
   </div>

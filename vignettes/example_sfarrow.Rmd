@@ -15,14 +15,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-`sfarrow` is currently an experimental package. It is designed to help
-read/write spatial vector data in "simple feature" format from/to Parquet files
-which maintaining coordinate reference system information. Essentially, this
-tool is attempting to connect data in [`sf`](https://r-spatial.github.io/sf/)
-and in [`arrow`](https://arrow.apache.org/docs/r/) and it relies on these
-packages for its internal work.
+`sfarrow` is designed to help read/write spatial vector data in "simple feature"
+format from/to Parquet files which maintaining coordinate reference system
+information. Essentially, this tool is attempting to connect data in
+[`sf`](https://r-spatial.github.io/sf/) and in
+[`arrow`](https://arrow.apache.org/docs/r/) and it relies on these packages for
+its internal work.
 
-A key goal is to support interoperability of spatial data in Parquet files, so
+A key goal is to support interoperability of spatial data in Parquet files. R
+objects (including `sf`) can be written to files with `arrow`; however, these do
+not necessarily maintain the spatial information or can be read in by Python.
 `sfarrow` implements a metadata format also used by Python `GeoPandas`,
 described here:
 [https://github.com/geopandas/geo-arrow-spec](https://github.com/geopandas/geo-arrow-spec).
@@ -40,14 +42,14 @@ library(dplyr, warn.conflicts = FALSE)
 
 A Parquet file (with `.parquet` extension) can be read using `st_read_parquet()`
 and pointing to the file system. This will create an `sf` spatial data object in
-memory.
+memory which can then be used as normal using functions from `sf`.
 
 ```{r}
 # read an example dataset created from Python using geopandas
 world <- st_read_parquet(system.file("extdata", "world.parquet", package = "sfarrow"))
 
 class(world)
-head(world)
+world
 plot(sf::st_geometry(world))
 ```
 
@@ -77,13 +79,9 @@ datasets.
 For this example we will use a dataset which was created by randomly splitting
 the nc.shp file first into three groups and then further partitioning into two
 more random groups. This creates a nested set of files.
-```{r message=FALSE, warning=FALSE, include=FALSE}
-devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
-```
 
 ```{r}
-# devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
-twee(system.file("extdata", "ds", package = "sfarrow"))
+list.files(system.file("extdata", "ds", package = "sfarrow"), recursive = TRUE)
 ```
 
 The file tree is showing that the data were partitioned by the variables
@@ -103,25 +101,47 @@ an `sf` object.
 ```{r}
 nc_ds <- read_sf_dataset(ds)
 
-head(nc_ds)
+nc_ds
 ```
 
 With large datasets, more often we will want query them and return a reduced set
 of the partitioned records. To create a query, the easiest way is to use
-`dplyr::filter()` on the partitioning (and/or other) variables and
-`dplyr::select()` to subset the columns. `read_sf_dataset()` will then use the
-`arrow_dplyr_query` and call `dplyr::collect()` to extract and then process the
-Arrow Table into `sf`. When using `select()`, if the geometry column is not
-returned, `sfarrow` will throw an error.
+`dplyr::filter()` on the partitioning (and/or other) variables to subset the
+rows and `dplyr::select()` to subset the columns. `read_sf_dataset()` will then
+use the `arrow_dplyr_query` and call `dplyr::collect()` to extract and then
+process the Arrow Table into `sf`. 
 
 ```{r, tidy=FALSE}
 nc_d12 <- ds %>% 
             filter(split1 == 1, split2 == 2) %>%
             read_sf_dataset()
 
-head(nc_d12)
+nc_d12
 plot(sf::st_geometry(nc_d12), col="grey")
 ```
+
+When using `select()` to read only a subset of columns, if the geometry column
+is not returned, the default behaviour of `sfarrow` is to throw an error from
+`read_sf_dataset`. If you do not need the geometry column for your analyses,
+then using `arrow` and not `sfarrow` should be sufficient. However, setting
+`find_geom = TRUE` in `read_sf_dataset` will read in any geometry columns in the
+metadata, in addition to the selected columns.
+
+```{r}
+# this command will throw an error
+# no geometry column selected for read_sf_dataset
+# nc_sub <- ds %>% 
+#             select('FIPS') %>% # subset of columns
+#             read_sf_dataset()
+
+# set find_geom
+nc_sub <- ds %>%
+            select('FIPS') %>% # subset of columns
+            read_sf_dataset(find_geom = TRUE)
+
+nc_sub
+```
+
 
 ### Writing to Datasets
 
@@ -141,7 +161,7 @@ In this example we are not using Hive style. This results in the partitioning
 variable not being in the folder paths.
 
 ```{r}
-twee(file.path(tempdir(), "world_ds"))
+list.files(file.path(tempdir(), "world_ds"))
 ```
 
 To read this style of Dataset, we must specify the partitioning variables when

@@ -53,7 +53,7 @@ list.files(file.path(tempdir(), "ds"), recursive = TRUE)
 # open parquet files from dataset
 ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 
-# create a query \%>\% also allowed
+# create a query. \%>\% also allowed
 q <- dplyr::filter(ds, group == 1)
 
 # read the dataset (piping syntax also works)
