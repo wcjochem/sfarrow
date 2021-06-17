@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/wcjochem/sfarrow/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@
     <p>Read an Arrow multi-file dataset and create <code>sf</code> object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_sf_dataset</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>read_sf_dataset</span><span class='op'>(</span><span class='va'>dataset</span>, find_geom <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,16 +142,22 @@
       <td><p>a <code>Dataset</code> object created by <code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>arrow::open_dataset</a></code>
 or an <code>arrow_dplyr_query</code></p></td>
     </tr>
+    <tr>
+      <th>find_geom</th>
+      <td><p>logical. Only needed when using <code>select</code> to select a
+subset of columns. Should all available geometry columns be added to to the
+dataset query without being named in the query? Default is <code>FALSE</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is primarily for use after opening a dataset with
 <code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>arrow::open_dataset</a></code>. Users can then query the <code>arrow Dataset</code>
-using <code>dplyr</code> methods such as <code>filter</code>. Passing the resulting
-query to this function will parse the datasets and create an <code>sf</code>
-object. The function expects consistent geo metadata to be stored with the
-dataset in order to create <code>sf</code> objects.</p>
+using <code>dplyr</code> methods such as <code>filter</code> or <code>select</code>. Passing
+the resulting query to this function will parse the datasets and create an
+<code>sf</code> object. The function expects consistent geo metadata to be stored
+with the dataset in order to create <code>sf</code> objects.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></code>, <code><a href='st_read_parquet.html'>st_read_parquet</a></code></p></div>
@@ -188,10 +194,10 @@ dataset in order to create <code>sf</code> objects.</p>
 
 <span class='va'>nc_d</span>
 </div><div class='output co'>#&gt; Simple feature collection with 33 features and 15 fields
-#&gt; geometry type:  MULTIPOLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -83.98855 ymin: 33.94867 xmax: -75.45698 ymax: 36.58965
-#&gt; geographic CRS: NAD27
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -83.98855 ymin: 33.94867 xmax: -75.45698 ymax: 36.58965
+#&gt; Geodetic CRS:  NAD27
 #&gt; First 10 features:
 #&gt;     AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 #&gt; 1  0.114     1.442  1825    1825       Ashe 37009  37009        5  1091     1
@@ -214,7 +220,7 @@ dataset in order to create <code>sf</code> objects.</p>
 #&gt; 7        4   977     0       5     1 MULTIPOLYGON (((-81.94135 3...
 #&gt; 8       65  1568     1      76     1 MULTIPOLYGON (((-80.49554 3...
 #&gt; 9      736  1863     0     950     1 MULTIPOLYGON (((-78.25455 3...
-#&gt; 10    1851  5189     7    2274     1 MULTIPOLYGON (((-78.18693 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; 10    1851  5189     7    2274     1 MULTIPOLYGON (((-78.18693 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='read_sf_dataset-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

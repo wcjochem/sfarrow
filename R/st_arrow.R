@@ -332,13 +332,16 @@ st_write_feather <- function(obj, dsn, ...){
 #'
 #' @param dataset a \code{Dataset} object created by \code{arrow::open_dataset}
 #'   or an \code{arrow_dplyr_query}
+#' @param find_geom logical. Only needed when using \code{select} to select a
+#'   subset of columns. Should all available geometry columns be added to to the
+#'   dataset query without being named in the query? Default is `FALSE`.
 #'
 #' @details This function is primarily for use after opening a dataset with
 #'   \code{arrow::open_dataset}. Users can then query the \code{arrow Dataset}
-#'   using \code{dplyr} methods such as \code{filter}. Passing the resulting
-#'   query to this function will parse the datasets and create an \code{sf}
-#'   object. The function expects consistent geo metadata to be stored with the
-#'   dataset in order to create \code{sf} objects.
+#'   using \code{dplyr} methods such as \code{filter} or \code{select}. Passing
+#'   the resulting query to this function will parse the datasets and create an
+#'   \code{sf} object. The function expects consistent geo metadata to be stored
+#'   with the dataset in order to create \code{sf} objects.
 #'
 #' @seealso \code{\link[arrow]{open_dataset}}, \code{\link{st_read_parquet}}
 #'
@@ -371,7 +374,7 @@ st_write_feather <- function(obj, dsn, ...){
 #' plot(sf::st_geometry(nc_d))
 #'
 #' @export
-read_sf_dataset <- function(dataset){
+read_sf_dataset <- function(dataset, find_geom = FALSE){
   if(missing(dataset)){
     stop("Must provide an Arrow dataset or 'dplyr' arrow query")
   }
@@ -387,6 +390,12 @@ read_sf_dataset <- function(dataset){
   } else{
     geo <- jsonlite::fromJSON(metadata$geo)
     validate_metadata(geo)
+  }
+
+  if(find_geom){
+    geom_cols <- names(geo$columns)
+    dataset <- dplyr::select(dataset$.data$clone(),
+                             c(names(dataset), geom_cols))
   }
 
   # execute query, or read dataset connection
@@ -435,7 +444,7 @@ read_sf_dataset <- function(dataset){
 #' # open parquet files from dataset
 #' ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
 #'
-#' # create a query %>% also allowed
+#' # create a query. %>% also allowed
 #' q <- dplyr::filter(ds, group == 1)
 #'
 #' # read the dataset (piping syntax also works)
