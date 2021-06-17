@@ -9,7 +9,7 @@ to read/write to .feather formats with `sf` objects.
 
 * New `write_sf_dataset()` and `read_sf_dataset()` to handle partitioned
 datasets. These also work with `dplyr` and grouped variables to define
-paritions.
+partitions.
 
 * New vignettes added for documentation of all functions.
 
