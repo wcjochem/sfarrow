@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • sfarrow</title>
+<title>License • sfarrow</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="License" />
 
 
 
@@ -58,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">sfarrow</a>
+        <a class="navbar-link" href="index.html">sfarrow</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
@@ -78,13 +78,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,12 +94,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/example_sfarrow.html">Getting started examples</a>
+      <a href="articles/example_sfarrow.html">Getting started examples</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,51 +120,15 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/wcjochem/sfarrow/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <h1>License</h1>
     </div>
 
-    <div id="sfarrow-040" class="section level1">
-<h1 class="page-header" data-toc-text="0.4.0">
-<a href="#sfarrow-040" class="anchor"></a>sfarrow 0.4.0</h1>
-<ul>
-<li><p>New <code>find_geom</code> parameter in <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> adds any geometry columns to the <code>arrow_dplyr_query</code>. Default behaviour is <code>FALSE</code> for consistent behaviour.</p></li>
-<li><p>Cleaning documentation and preparing for CRAN submission</p></li>
-</ul>
-</div>
-    <div id="sfarrow-030" class="section level1">
-<h1 class="page-header" data-toc-text="0.3.0">
-<a href="#sfarrow-030" class="anchor"></a>sfarrow 0.3.0</h1>
-<ul>
-<li>New <code><a href="../reference/st_write_feather.html">st_write_feather()</a></code> and <code><a href="../reference/st_read_feather.html">st_read_feather()</a></code> allow similar functionality to read/write to .feather formats with <code>sf</code> objects.</li>
-<li>Following <code>arrow</code> 2.0.0, properties to <code><a href="../reference/st_write_parquet.html">st_write_parquet()</a></code> are deprecated.</li>
-</ul>
-</div>
-    <div id="sfarrow-020" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.0">
-<a href="#sfarrow-020" class="anchor"></a>sfarrow 0.2.0</h1>
-<ul>
-<li><p>New <code><a href="../reference/write_sf_dataset.html">write_sf_dataset()</a></code> and <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> to handle partitioned datasets. These also work with <code>dplyr</code> and grouped variables to define paritions.</p></li>
-<li><p>New vignettes added for documentation of all functions.</p></li>
-</ul>
-</div>
-    <div id="sfarrow-011" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#sfarrow-011" class="anchor"></a>sfarrow 0.1.1</h1>
-<ul>
-<li>
-<code><a href="../reference/st_write_parquet.html">st_write_parquet()</a></code> now warns uses that geo metadata format may change.</li>
-</ul>
-</div>
-    <div id="sfarrow-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#sfarrow-010" class="anchor"></a>sfarrow 0.1.0</h1>
-<ul>
-<li>This is the initial release of <code>sfarrow</code>.</li>
-</ul>
-</div>
+<pre>YEAR: 2021
+COPYRIGHT HOLDER: Chris Jochem
+</pre>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -174,6 +138,7 @@
   </div>
 
 </div>
+
 
 
       <footer>

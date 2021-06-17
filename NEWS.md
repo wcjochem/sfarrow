@@ -3,6 +3,8 @@
 * New `find_geom` parameter in `read_sf_dataset()` adds any geometry columns to
 the `arrow_dplyr_query`. Default behaviour is `FALSE` for consistent behaviour.
 
+* Cleaning documentation and preparing for CRAN submission
+
 # sfarrow 0.3.0
 
 * New `st_write_feather()` and `st_read_feather()` allow similar functionality

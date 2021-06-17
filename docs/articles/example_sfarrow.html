@@ -162,23 +162,10 @@
 <p><code>sfarrow</code> accesses <code>arrows</code>’s <code>dplyr</code> interface to explore partitioned, Arrow datasets.</p>
 <p>For this example we will use a dataset which was created by randomly splitting the nc.shp file first into three groups and then further partitioning into two more random groups. This creates a nested set of files.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")</span>
-<span class="fu">twee</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; -- split1=1</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-5.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-2.parquet</span>
-<span class="co">#&gt; -- split1=2</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-3.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-0.parquet</span>
-<span class="co">#&gt; -- split1=3</span>
-<span class="co">#&gt;    |__split2=1</span>
-<span class="co">#&gt;       |__part-4.parquet</span>
-<span class="co">#&gt;    |__split2=2</span>
-<span class="co">#&gt;       |__part-1.parquet</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] "split1=1/split2=1/part-5.parquet" "split1=1/split2=2/part-2.parquet"</span>
+<span class="co">#&gt; [3] "split1=2/split2=1/part-3.parquet" "split1=2/split2=2/part-0.parquet"</span>
+<span class="co">#&gt; [5] "split1=3/split2=1/part-4.parquet" "split1=3/split2=2/part-1.parquet"</span></code></pre></div>
 <p>The file tree is showing that the data were partitioned by the variables “split1” and “split2”. Those are the column names that were used for the random splits. This partitioning is in <a href="https://hive.apache.org/">“Hive style”</a> where the partitioning variables are in the paths.</p>
 <p>The first step is to open the Dataset using <code>arrow</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -218,8 +205,8 @@
 <span class="co">#&gt; 10     930  9956    18    1206      1      1 MULTIPOLYGON (((-82.2581 35...</span></code></pre></div>
 <p>With large datasets, more often we will want query them and return a reduced set of the partitioned records. To create a query, the easiest way is to use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code> on the partitioning (and/or other) variables to subset the rows and <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> to subset the columns. <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> will then use the <code>arrow_dplyr_query</code> and call <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::collect()</a></code> to extract and then process the Arrow Table into <code>sf</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc_d12</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">split1</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">split2</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">nc_d12</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span> 
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">split1</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">split2</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span>
             <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">nc_d12</span>
@@ -252,7 +239,7 @@
 <span class="co">#&gt; 9      591  2398     3     687      1      2 MULTIPOLYGON (((-79.55536 3...</span>
 <span class="co">#&gt; 10    1165  4780    13    1349      1      2 MULTIPOLYGON (((-78.53874 3...</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_d12</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span></code></pre></div>
-<p><img src="example_sfarrow_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="example_sfarrow_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>When using <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> to read only a subset of columns, if the geometry column is not returned, the default behaviour of <code>sfarrow</code> is to throw an error from <code>read_sf_dataset</code>. If you do not need the geometry column for your analyses, then using <code>arrow</code> and not <code>sfarrow</code> should be sufficient. However, setting <code>find_geom = TRUE</code> in <code>read_sf_dataset</code> will read in any geometry columns in the metadata, in addition to the selected columns.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># this command will throw an error</span>
@@ -262,8 +249,8 @@
 <span class="co">#             read_sf_dataset()</span>
 
 <span class="co"># set find_geom</span>
-<span class="va">nc_sub</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="st">'FIPS'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># subset of columns</span>
+<span class="va">nc_sub</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="st">'FIPS'</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># subset of columns</span>
             <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span>find_geom <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">nc_sub</span>
@@ -290,8 +277,8 @@
 <a href="#writing-to-datasets" class="anchor"></a>Writing to Datasets</h3>
 <p>To write an <code>sf</code> object into multiple files, we can again construct a query using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">dplyr::group_by()</a></code> to define the partitioning variables. The result is then passed to <code>sfarrow</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">world</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">world</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/write_sf_dataset.html">write_sf_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span>, 
                    format <span class="op">=</span> <span class="st">"parquet"</span>,
                    hive_style <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -303,28 +290,16 @@
 <span class="co">#&gt; able to rewrite your Parquet/Feather files.</span></code></pre></div>
 <p>In this example we are not using Hive style. This results in the partitioning variable not being in the folder paths.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">twee</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; -- Africa</span>
-<span class="co">#&gt;    |__part-0.parquet</span>
-<span class="co">#&gt; -- Antarctica</span>
-<span class="co">#&gt;    |__part-1.parquet</span>
-<span class="co">#&gt; -- Asia</span>
-<span class="co">#&gt;    |__part-2.parquet</span>
-<span class="co">#&gt; -- Europe</span>
-<span class="co">#&gt;    |__part-3.parquet</span>
-<span class="co">#&gt; -- North America</span>
-<span class="co">#&gt;    |__part-4.parquet</span>
-<span class="co">#&gt; -- Oceania</span>
-<span class="co">#&gt;    |__part-5.parquet</span>
-<span class="co">#&gt; -- Seven seas (open ocean)</span>
-<span class="co">#&gt;    |__part-6.parquet</span>
-<span class="co">#&gt; -- South America</span>
-<span class="co">#&gt;    |__part-7.parquet</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Africa"                  "Antarctica"             </span>
+<span class="co">#&gt; [3] "Asia"                    "Europe"                 </span>
+<span class="co">#&gt; [5] "North America"           "Oceania"                </span>
+<span class="co">#&gt; [7] "Seven seas (open ocean)" "South America"</span></code></pre></div>
 <p>To read this style of Dataset, we must specify the partitioning variables when it is opened.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r//reference/open_dataset.html">open_dataset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"world_ds"</span><span class="op">)</span>, 
-                    partitioning <span class="op">=</span> <span class="st">"continent"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">continent</span> <span class="op">==</span> <span class="st">"Africa"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+                    partitioning <span class="op">=</span> <span class="st">"continent"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">continent</span> <span class="op">==</span> <span class="st">"Africa"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 51 features and 5 fields</span>
 <span class="co">#&gt; Geometry type: GEOMETRY</span>

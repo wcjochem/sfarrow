@@ -178,70 +178,66 @@ partitioning. Allows for <code>dplyr</code> grouped datasets (using
     <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/write_dataset.html'>write_dataset</a></code>, <code><a href='st_read_parquet.html'>st_read_parquet</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># read spatial object</span></span>
-<span class='r-in'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># create random grouping</span></span>
-<span class='r-in'><span class='va'>nc</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># use dplyr to group the dataset. %&gt;% also allowed</span></span>
-<span class='r-in'><span class='va'>nc_g</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>nc</span>, <span class='va'>group</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># write out to parquet datasets</span></span>
-<span class='r-in'><span class='co'># partitioning determined by dplyr 'group_vars'</span></span>
-<span class='r-in'><span class='fu'>write_sf_dataset</span><span class='op'>(</span><span class='va'>nc_g</span>, path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>This is an initial implementation of Parquet/Feather file support and</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> geo metadata. This is tracking version 0.1.0 of the metadata</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> (https://github.com/geopandas/geo-arrow-spec). This metadata</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> specification may change and does not yet make stability promises.  We</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> do not yet recommend using this in a production setting unless you are</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> able to rewrite your Parquet/Feather files.</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "group=1/part-0.parquet" "group=2/part-1.parquet" "group=3/part-2.parquet"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># open parquet files from dataset</span></span>
-<span class='r-in'><span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>arrow</span><span class='fu'>::</span><span class='fu'><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># create a query. %&gt;% also allowed</span></span>
-<span class='r-in'><span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ds</span>, <span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># read the dataset (piping syntax also works)</span></span>
-<span class='r-in'><span class='va'>nc_d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='read_sf_dataset.html'>read_sf_dataset</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>nc_d</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 37 features and 15 fields</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.95718 ymax: 36.58965</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> First 10 features:</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  0.062     1.547  1834    1834      Camden 37029  37029       15   286     0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  0.153     1.616  1839    1839  Rockingham 37157  37157       79  4449    16</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  0.143     1.663  1840    1840   Granville 37077  37077       39  1671     4</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  0.109     1.325  1841    1841      Person 37145  37145       73  1556     4</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  0.190     2.204  1846    1846     Halifax 37083  37083       42  3608    18</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 0.044     1.158  1887    1887      Chowan 37041  37041       21   751     1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    NWBIR74 BIR79 SID79 NWBIR79 group                       geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     1066  1606     3    1197     1 MULTIPOLYGON (((-77.21767 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      115   350     2     139     1 MULTIPOLYGON (((-76.00897 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      748  1190     2     844     1 MULTIPOLYGON (((-78.30876 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7      930  2074     4    1058     1 MULTIPOLYGON (((-78.74912 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8      613  1790     4     650     1 MULTIPOLYGON (((-78.8068 36...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9     2365  4463    17    2980     1 MULTIPOLYGON (((-77.33221 3...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     368   899     1     491     1 MULTIPOLYGON (((-76.68874 3...</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-plt'><img src='write_sf_dataset-1.png' alt='' width='700' height='433' /></span>
-<span class='r-in'></span>
-</pre>
+    <pre class="examples"><div class='input'><span class='co'># read spatial object</span>
+<span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># create random grouping</span>
+<span class='va'>nc</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># use dplyr to group the dataset. %&gt;% also allowed</span>
+<span class='va'>nc_g</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>nc</span>, <span class='va'>group</span><span class='op'>)</span>
+
+<span class='co'># write out to parquet datasets</span>
+<span class='co'># partitioning determined by dplyr 'group_vars'</span>
+<span class='fu'>write_sf_dataset</span><span class='op'>(</span><span class='va'>nc_g</span>, path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: This is an initial implementation of Parquet/Feather file support and</span>
+#&gt; <span class='warning'>geo metadata. This is tracking version 0.1.0 of the metadata</span>
+#&gt; <span class='warning'>(https://github.com/geopandas/geo-arrow-spec). This metadata</span>
+#&gt; <span class='warning'>specification may change and does not yet make stability promises.  We</span>
+#&gt; <span class='warning'>do not yet recommend using this in a production setting unless you are</span>
+#&gt; <span class='warning'>able to rewrite your Parquet/Feather files.</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "group=1/part-0.parquet" "group=2/part-1.parquet" "group=3/part-2.parquet"</div><div class='input'>
+<span class='co'># open parquet files from dataset</span>
+<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>arrow</span><span class='fu'>::</span><span class='fu'><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"ds"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># create a query. %&gt;% also allowed</span>
+<span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ds</span>, <span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='co'># read the dataset (piping syntax also works)</span>
+<span class='va'>nc_d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='read_sf_dataset.html'>read_sf_dataset</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
+
+<span class='va'>nc_d</span>
+</div><div class='output co'>#&gt; Simple feature collection with 37 features and 15 fields
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.95718 ymax: 36.58965
+#&gt; Geodetic CRS:  NAD27
+#&gt; First 10 features:
+#&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
+#&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
+#&gt; 2  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9
+#&gt; 3  0.062     1.547  1834    1834      Camden 37029  37029       15   286     0
+#&gt; 4  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
+#&gt; 5  0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2
+#&gt; 6  0.153     1.616  1839    1839  Rockingham 37157  37157       79  4449    16
+#&gt; 7  0.143     1.663  1840    1840   Granville 37077  37077       39  1671     4
+#&gt; 8  0.109     1.325  1841    1841      Person 37145  37145       73  1556     4
+#&gt; 9  0.190     2.204  1846    1846     Halifax 37083  37083       42  3608    18
+#&gt; 10 0.044     1.158  1887    1887      Chowan 37041  37041       21   751     1
+#&gt;    NWBIR74 BIR79 SID79 NWBIR79 group                       geometry
+#&gt; 1       10  1364     0      19     1 MULTIPOLYGON (((-81.47276 3...
+#&gt; 2     1066  1606     3    1197     1 MULTIPOLYGON (((-77.21767 3...
+#&gt; 3      115   350     2     139     1 MULTIPOLYGON (((-76.00897 3...
+#&gt; 4      748  1190     2     844     1 MULTIPOLYGON (((-78.30876 3...
+#&gt; 5      550  1253     2     597     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 6     1243  5386     5    1369     1 MULTIPOLYGON (((-79.53051 3...
+#&gt; 7      930  2074     4    1058     1 MULTIPOLYGON (((-78.74912 3...
+#&gt; 8      613  1790     4     650     1 MULTIPOLYGON (((-78.8068 36...
+#&gt; 9     2365  4463    17    2980     1 MULTIPOLYGON (((-77.33221 3...
+#&gt; 10     368   899     1     491     1 MULTIPOLYGON (((-76.68874 3...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_d</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='write_sf_dataset-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

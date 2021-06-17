@@ -79,13 +79,9 @@ datasets.
 For this example we will use a dataset which was created by randomly splitting
 the nc.shp file first into three groups and then further partitioning into two
 more random groups. This creates a nested set of files.
-```{r message=FALSE, warning=FALSE, include=FALSE}
-devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
-```
 
 ```{r}
-# devtools::source_gist("https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60", filename="twee.R")
-twee(system.file("extdata", "ds", package = "sfarrow"))
+list.files(system.file("extdata", "ds", package = "sfarrow"), recursive = TRUE)
 ```
 
 The file tree is showing that the data were partitioned by the variables
@@ -165,7 +161,7 @@ In this example we are not using Hive style. This results in the partitioning
 variable not being in the folder paths.
 
 ```{r}
-twee(file.path(tempdir(), "world_ds"))
+list.files(file.path(tempdir(), "world_ds"))
 ```
 
 To read this style of Dataset, we must specify the partitioning variables when

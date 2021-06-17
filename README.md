@@ -44,7 +44,7 @@ The installation requires the Arrow library which should be installed
 with the `R` package `arrow` dependency. However, some systems may need
 to follow additional steps to enable full support of that library.
 Please refer to the `arrow`
-[documentation](https://cran.r-project.org/web/packages/arrow/vignettes/install.html).
+[documentation](https://CRAN.R-project.org/package=arrow/vignettes/install.html).
 
 ## Basic usage
 
