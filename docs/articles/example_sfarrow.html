@@ -163,9 +163,9 @@
 <p>For this example we will use a dataset which was created by randomly splitting the nc.shp file first into three groups and then further partitioning into two more random groups. This creates a nested set of files.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; [1] "split1=1/split2=1/part-5.parquet" "split1=1/split2=2/part-2.parquet"</span>
-<span class="co">#&gt; [3] "split1=2/split2=1/part-3.parquet" "split1=2/split2=2/part-0.parquet"</span>
-<span class="co">#&gt; [5] "split1=3/split2=1/part-4.parquet" "split1=3/split2=2/part-1.parquet"</span></code></pre></div>
+<span class="co">#&gt; [1] "split1=1/split2=1/part-3.parquet" "split1=1/split2=2/part-0.parquet"</span>
+<span class="co">#&gt; [3] "split1=2/split2=1/part-1.parquet" "split1=2/split2=2/part-5.parquet"</span>
+<span class="co">#&gt; [5] "split1=3/split2=1/part-2.parquet" "split1=3/split2=2/part-4.parquet"</span></code></pre></div>
 <p>The file tree is showing that the data were partitioned by the variables “split1” and “split2”. Those are the column names that were used for the random splits. This partitioning is in <a href="https://hive.apache.org/">“Hive style”</a> where the partitioning variables are in the paths.</p>
 <p>The first step is to open the Dataset using <code>arrow</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -181,28 +181,28 @@
 <span class="co">#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="co">#&gt; Geodetic CRS:  NAD27</span>
 <span class="co">#&gt; First 10 features:</span>
-<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class="co">#&gt; 1  0.097     1.670  1833    1833  Hertford 37091  37091       46  1452     7</span>
-<span class="co">#&gt; 2  0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146     4</span>
-<span class="co">#&gt; 3  0.180     2.151  1905    1905    Bertie 37015  37015        8  1324     6</span>
-<span class="co">#&gt; 4  0.059     1.319  1927    1927  Mitchell 37121  37121       61   671     0</span>
-<span class="co">#&gt; 5  0.122     1.516  1932    1932  Caldwell 37027  37027       14  3609     6</span>
-<span class="co">#&gt; 6  0.155     1.781  1947    1947   Iredell 37097  37097       49  4139     4</span>
-<span class="co">#&gt; 7  0.066     1.070  1950    1950 Alexander 37003  37003        2  1333     0</span>
-<span class="co">#&gt; 8  0.134     1.755  1958    1958     Burke 37023  37023       12  3573     5</span>
-<span class="co">#&gt; 9  0.094     1.307  1979    1979    Wilson 37195  37195       98  3702    11</span>
-<span class="co">#&gt; 10 0.168     1.995  1988    1988  Buncombe 37021  37021       11  7515     9</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID     NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt; 1  0.097     1.670  1833    1833 Hertford 37091  37091       46  1452     7</span>
+<span class="co">#&gt; 2  0.062     1.547  1834    1834   Camden 37029  37029       15   286     0</span>
+<span class="co">#&gt; 3  0.109     1.325  1841    1841   Person 37145  37145       73  1556     4</span>
+<span class="co">#&gt; 4  0.081     1.288  1880    1880  Watauga 37189  37189       95  1323     1</span>
+<span class="co">#&gt; 5  0.044     1.158  1887    1887   Chowan 37041  37041       21   751     1</span>
+<span class="co">#&gt; 6  0.086     1.267  1893    1893   Yadkin 37197  37197       99  1269     1</span>
+<span class="co">#&gt; 7  0.170     1.680  1903    1903 Guilford 37081  37081       41 16184    23</span>
+<span class="co">#&gt; 8  0.118     1.601  1946    1946  Madison 37115  37115       58   765     2</span>
+<span class="co">#&gt; 9  0.134     1.755  1958    1958    Burke 37023  37023       12  3573     5</span>
+<span class="co">#&gt; 10 0.116     1.664  1964    1964 McDowell 37111  37111       56  1946     5</span>
 <span class="co">#&gt;    NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
 <span class="co">#&gt; 1      954  1838     5    1237      1      1 MULTIPOLYGON (((-76.74506 3...</span>
-<span class="co">#&gt; 2      200  3725     7     222      1      1 MULTIPOLYGON (((-81.02057 3...</span>
-<span class="co">#&gt; 3      921  1616     5    1161      1      1 MULTIPOLYGON (((-76.78307 3...</span>
-<span class="co">#&gt; 4        1   919     2       4      1      1 MULTIPOLYGON (((-82.11885 3...</span>
-<span class="co">#&gt; 5      309  4249     9     360      1      1 MULTIPOLYGON (((-81.32813 3...</span>
-<span class="co">#&gt; 6     1144  5400     5    1305      1      1 MULTIPOLYGON (((-80.72652 3...</span>
-<span class="co">#&gt; 7      128  1683     2     150      1      1 MULTIPOLYGON (((-81.10889 3...</span>
-<span class="co">#&gt; 8      326  4314    15     407      1      1 MULTIPOLYGON (((-81.81628 3...</span>
-<span class="co">#&gt; 9     1827  4706    13    2330      1      1 MULTIPOLYGON (((-78.06533 3...</span>
-<span class="co">#&gt; 10     930  9956    18    1206      1      1 MULTIPOLYGON (((-82.2581 35...</span></code></pre></div>
+<span class="co">#&gt; 2      115   350     2     139      1      1 MULTIPOLYGON (((-76.00897 3...</span>
+<span class="co">#&gt; 3      613  1790     4     650      1      1 MULTIPOLYGON (((-78.8068 36...</span>
+<span class="co">#&gt; 4       17  1775     1      33      1      1 MULTIPOLYGON (((-81.80622 3...</span>
+<span class="co">#&gt; 5      368   899     1     491      1      1 MULTIPOLYGON (((-76.68874 3...</span>
+<span class="co">#&gt; 6       65  1568     1      76      1      1 MULTIPOLYGON (((-80.49554 3...</span>
+<span class="co">#&gt; 7     5483 20543    38    7089      1      1 MULTIPOLYGON (((-79.53782 3...</span>
+<span class="co">#&gt; 8        5   926     2       3      1      1 MULTIPOLYGON (((-82.89597 3...</span>
+<span class="co">#&gt; 9      326  4314    15     407      1      1 MULTIPOLYGON (((-81.81628 3...</span>
+<span class="co">#&gt; 10     134  2215     5     128      1      1 MULTIPOLYGON (((-81.81628 3...</span></code></pre></div>
 <p>With large datasets, more often we will want query them and return a reduced set of the partitioned records. To create a query, the easiest way is to use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code> on the partitioning (and/or other) variables to subset the rows and <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> to subset the columns. <code><a href="../reference/read_sf_dataset.html">read_sf_dataset()</a></code> will then use the <code>arrow_dplyr_query</code> and call <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::collect()</a></code> to extract and then process the Arrow Table into <code>sf</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc_d12</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">%&gt;%</span> 
@@ -210,34 +210,34 @@
             <span class="fu"><a href="../reference/read_sf_dataset.html">read_sf_dataset</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">nc_d12</span>
-<span class="co">#&gt; Simple feature collection with 15 features and 16 fields</span>
+<span class="co">#&gt; Simple feature collection with 20 features and 16 fields</span>
 <span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
-<span class="co">#&gt; Bounding box:  xmin: -83.9547 ymin: 34.82742 xmax: -76.42043 ymax: 36.55525</span>
+<span class="co">#&gt; Bounding box:  xmin: -83.36472 ymin: 34.71101 xmax: -75.45698 ymax: 36.58965</span>
 <span class="co">#&gt; Geodetic CRS:  NAD27</span>
 <span class="co">#&gt; First 10 features:</span>
-<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID       NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
-<span class="co">#&gt; 1  0.091     1.284  1835    1835      Gates 37073  37073       37   420     0</span>
-<span class="co">#&gt; 2  0.118     1.421  1836    1836     Warren 37185  37185       93   968     4</span>
-<span class="co">#&gt; 3  0.114     1.352  1838    1838    Caswell 37033  37033       17  1035     2</span>
-<span class="co">#&gt; 4  0.153     1.616  1839    1839 Rockingham 37157  37157       79  4449    16</span>
-<span class="co">#&gt; 5  0.143     1.663  1840    1840  Granville 37077  37077       39  1671     4</span>
-<span class="co">#&gt; 6  0.072     1.085  1842    1842      Vance 37181  37181       91  2180     4</span>
-<span class="co">#&gt; 7  0.044     1.158  1887    1887     Chowan 37041  37041       21   751     1</span>
-<span class="co">#&gt; 8  0.069     1.201  1948    1948      Davie 37059  37059       30  1207     1</span>
-<span class="co">#&gt; 9  0.180     2.142  1973    1973    Chatham 37037  37037       19  1646     2</span>
-<span class="co">#&gt; 10 0.207     1.851  1989    1989   Johnston 37101  37101       51  3999     6</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1</span>
+<span class="co">#&gt; 2  0.143     1.630  1828    1828       Surry 37171  37171       86  3188     5</span>
+<span class="co">#&gt; 3  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9</span>
+<span class="co">#&gt; 4  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4</span>
+<span class="co">#&gt; 5  0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2</span>
+<span class="co">#&gt; 6  0.143     1.663  1840    1840   Granville 37077  37077       39  1671     4</span>
+<span class="co">#&gt; 7  0.108     1.483  1900    1900     Forsyth 37067  37067       34 11858    10</span>
+<span class="co">#&gt; 8  0.111     1.392  1904    1904    Alamance 37001  37001        1  4672    13</span>
+<span class="co">#&gt; 9  0.104     1.294  1907    1907      Orange 37135  37135       68  3164     4</span>
+<span class="co">#&gt; 10 0.122     1.516  1932    1932    Caldwell 37027  37027       14  3609     6</span>
 <span class="co">#&gt;    NWBIR74 BIR79 SID79 NWBIR79 split1 split2                       geometry</span>
-<span class="co">#&gt; 1      254   594     2     371      1      2 MULTIPOLYGON (((-76.56251 3...</span>
-<span class="co">#&gt; 2      748  1190     2     844      1      2 MULTIPOLYGON (((-78.30876 3...</span>
-<span class="co">#&gt; 3      550  1253     2     597      1      2 MULTIPOLYGON (((-79.53051 3...</span>
-<span class="co">#&gt; 4     1243  5386     5    1369      1      2 MULTIPOLYGON (((-79.53051 3...</span>
-<span class="co">#&gt; 5      930  2074     4    1058      1      2 MULTIPOLYGON (((-78.74912 3...</span>
-<span class="co">#&gt; 6     1179  2753     6    1492      1      2 MULTIPOLYGON (((-78.49252 3...</span>
-<span class="co">#&gt; 7      368   899     1     491      1      2 MULTIPOLYGON (((-76.68874 3...</span>
-<span class="co">#&gt; 8      148  1438     3     177      1      2 MULTIPOLYGON (((-80.45677 3...</span>
-<span class="co">#&gt; 9      591  2398     3     687      1      2 MULTIPOLYGON (((-79.55536 3...</span>
-<span class="co">#&gt; 10    1165  4780    13    1349      1      2 MULTIPOLYGON (((-78.53874 3...</span>
+<span class="co">#&gt; 1       10  1364     0      19      1      2 MULTIPOLYGON (((-81.47276 3...</span>
+<span class="co">#&gt; 2      208  3616     6     260      1      2 MULTIPOLYGON (((-80.45634 3...</span>
+<span class="co">#&gt; 3     1066  1606     3    1197      1      2 MULTIPOLYGON (((-77.21767 3...</span>
+<span class="co">#&gt; 4      748  1190     2     844      1      2 MULTIPOLYGON (((-78.30876 3...</span>
+<span class="co">#&gt; 5      550  1253     2     597      1      2 MULTIPOLYGON (((-79.53051 3...</span>
+<span class="co">#&gt; 6      930  2074     4    1058      1      2 MULTIPOLYGON (((-78.74912 3...</span>
+<span class="co">#&gt; 7     3919 15704    18    5031      1      2 MULTIPOLYGON (((-80.0381 36...</span>
+<span class="co">#&gt; 8     1243  5767    11    1397      1      2 MULTIPOLYGON (((-79.24619 3...</span>
+<span class="co">#&gt; 9      776  4478     6    1086      1      2 MULTIPOLYGON (((-79.01814 3...</span>
+<span class="co">#&gt; 10     309  4249     9     360      1      2 MULTIPOLYGON (((-81.32813 3...</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_d12</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span></code></pre></div>
 <p><img src="example_sfarrow_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>When using <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> to read only a subset of columns, if the geometry column is not returned, the default behaviour of <code>sfarrow</code> is to throw an error from <code>read_sf_dataset</code>. If you do not need the geometry column for your analyses, then using <code>arrow</code> and not <code>sfarrow</code> should be sufficient. However, setting <code>find_geom = TRUE</code> in <code>read_sf_dataset</code> will read in any geometry columns in the metadata, in addition to the selected columns.</p>
@@ -262,15 +262,15 @@
 <span class="co">#&gt; First 10 features:</span>
 <span class="co">#&gt;     FIPS                       geometry</span>
 <span class="co">#&gt; 1  37091 MULTIPOLYGON (((-76.74506 3...</span>
-<span class="co">#&gt; 2  37193 MULTIPOLYGON (((-81.02057 3...</span>
-<span class="co">#&gt; 3  37015 MULTIPOLYGON (((-76.78307 3...</span>
-<span class="co">#&gt; 4  37121 MULTIPOLYGON (((-82.11885 3...</span>
-<span class="co">#&gt; 5  37027 MULTIPOLYGON (((-81.32813 3...</span>
-<span class="co">#&gt; 6  37097 MULTIPOLYGON (((-80.72652 3...</span>
-<span class="co">#&gt; 7  37003 MULTIPOLYGON (((-81.10889 3...</span>
-<span class="co">#&gt; 8  37023 MULTIPOLYGON (((-81.81628 3...</span>
-<span class="co">#&gt; 9  37195 MULTIPOLYGON (((-78.06533 3...</span>
-<span class="co">#&gt; 10 37021 MULTIPOLYGON (((-82.2581 35...</span></code></pre></div>
+<span class="co">#&gt; 2  37029 MULTIPOLYGON (((-76.00897 3...</span>
+<span class="co">#&gt; 3  37145 MULTIPOLYGON (((-78.8068 36...</span>
+<span class="co">#&gt; 4  37189 MULTIPOLYGON (((-81.80622 3...</span>
+<span class="co">#&gt; 5  37041 MULTIPOLYGON (((-76.68874 3...</span>
+<span class="co">#&gt; 6  37197 MULTIPOLYGON (((-80.49554 3...</span>
+<span class="co">#&gt; 7  37081 MULTIPOLYGON (((-79.53782 3...</span>
+<span class="co">#&gt; 8  37115 MULTIPOLYGON (((-82.89597 3...</span>
+<span class="co">#&gt; 9  37023 MULTIPOLYGON (((-81.81628 3...</span>
+<span class="co">#&gt; 10 37111 MULTIPOLYGON (((-81.81628 3...</span></code></pre></div>
 </div>
 <div id="writing-to-datasets" class="section level3">
 <h3 class="hasAnchor">
