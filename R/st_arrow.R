@@ -394,7 +394,8 @@ read_sf_dataset <- function(dataset, find_geom = FALSE){
 
   if(find_geom){
     geom_cols <- names(geo$columns)
-    dataset <- dataset$.data$clone() %>% select(names(dataset), geom_cols)
+    dataset <- dplyr::select(dataset$.data$clone(),
+                             c(names(dataset), geom_cols))
   }
 
   # execute query, or read dataset connection
