@@ -7,11 +7,14 @@
 st_write_parquet(obj, dsn, ...)
 }
 \arguments{
-\item{obj}{object of class \code{sf}}
+\item{obj}{object of class \code{\link[sf]{sf}}}
 
 \item{dsn}{data source name. A path and file name with .parquet extension}
 
 \item{...}{additional options to pass to \code{\link[arrow]{write_parquet}}}
+}
+\value{
+\code{obj} invisibly
 }
 \description{
 Convert a simple features spatial object from \code{sf} and

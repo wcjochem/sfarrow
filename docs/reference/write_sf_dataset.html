@@ -145,7 +145,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>object of class <code>sf</code></p></td>
+      <td><p>object of class <code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code></p></td>
     </tr>
     <tr>
       <th>path</th>
@@ -167,12 +167,16 @@ the <code><a href='https://dplyr.tidyverse.org/reference/group_data.html'>dplyr:
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>obj</code> invisibly</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Translate an <code>sf</code> spatial object to <code>data.frame</code> with WKB
 geometry columns and then write to an <code>arrow</code> dataset with
 partitioning. Allows for <code>dplyr</code> grouped datasets (using
-<code>group_by</code>) and uses those variables to define partitions.</p>
+<code><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></code>) and uses those variables to define
+partitions.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/write_dataset.html'>write_dataset</a></code>, <code><a href='st_read_parquet.html'>st_read_parquet</a></code></p></div>

@@ -10,9 +10,13 @@ read_sf_dataset(dataset, find_geom = FALSE)
 \item{dataset}{a \code{Dataset} object created by \code{arrow::open_dataset}
 or an \code{arrow_dplyr_query}}
 
-\item{find_geom}{logical. Only needed when using \code{select} to select a
-subset of columns. Should all available geometry columns be added to to the
-dataset query without being named in the query? Default is \code{FALSE}.}
+\item{find_geom}{logical. Only needed when returning a subset of columns.
+Should all available geometry columns be selected and added to to the
+dataset query without being named? Default is \code{FALSE} to require
+geometry column(s) to be selected specifically.}
+}
+\value{
+object of class \code{\link[sf]{sf}}
 }
 \description{
 Read an Arrow multi-file dataset and create \code{sf} object
@@ -20,10 +24,11 @@ Read an Arrow multi-file dataset and create \code{sf} object
 \details{
 This function is primarily for use after opening a dataset with
 \code{arrow::open_dataset}. Users can then query the \code{arrow Dataset}
-using \code{dplyr} methods such as \code{filter} or \code{select}. Passing
-the resulting query to this function will parse the datasets and create an
-\code{sf} object. The function expects consistent geo metadata to be stored
-with the dataset in order to create \code{sf} objects.
+using \code{dplyr} methods such as \code{\link[dplyr]{filter}} or
+\code{\link[dplyr]{select}}. Passing the resulting query to this function
+will parse the datasets and create an \code{sf} object. The function
+expects consistent geographic metadata to be stored with the dataset in
+order to create \code{\link[sf]{sf}} objects.
 }
 \examples{
 # read spatial object
@@ -55,5 +60,5 @@ plot(sf::st_geometry(nc_d))
 
 }
 \seealso{
-\code{\link[arrow]{open_dataset}}, \code{\link{st_read_parquet}}
+\code{\link[arrow]{open_dataset}}, \code{\link[sf]{st_read}}, \code{\link{st_read_parquet}}
 }

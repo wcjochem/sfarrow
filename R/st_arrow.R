@@ -142,9 +142,9 @@ arrow_to_sf <- function(tbl, metadata){
 #'   \url{https://github.com/geopandas/geo-arrow-spec}. These are standard with
 #'   the Python \code{GeoPandas} library.
 #'
-#' @seealso \code{\link[arrow]{read_parquet}}
+#' @seealso \code{\link[arrow]{read_parquet}}, \code{\link[sf]{st_read}}
 #'
-#' @return object of class \code{sf}
+#' @return object of class \code{\link[sf]{sf}}
 #'
 #' @examples
 #' # load Natural Earth low-res dataset.
@@ -205,9 +205,9 @@ st_read_parquet <- function(dsn, col_select = NULL,
 #'   \url{https://github.com/geopandas/geo-arrow-spec}. These are standard with
 #'   the Python \code{GeoPandas} library.
 #'
-#' @seealso \code{\link[arrow]{read_feather}}
+#' @seealso \code{\link[arrow]{read_feather}}, \code{\link[sf]{st_read}}
 #'
-#' @return object of class \code{sf}
+#' @return object of class \code{\link[sf]{sf}}
 #'
 #' @examples
 #' # load Natural Earth low-res dataset.
@@ -250,9 +250,11 @@ st_read_feather <- function(dsn, col_select = NULL, ...){
 #'   write to a Parquet file using \code{\link[arrow]{write_parquet}}. Geometry
 #'   columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 #'
-#' @param obj object of class \code{sf}
+#' @param obj object of class \code{\link[sf]{sf}}
 #' @param dsn data source name. A path and file name with .parquet extension
 #' @param ... additional options to pass to \code{\link[arrow]{write_parquet}}
+#'
+#' @return \code{obj} invisibly
 #'
 #' @seealso \code{\link[arrow]{write_parquet}}
 #'
@@ -283,6 +285,8 @@ st_write_parquet <- function(obj, dsn, ...){
   tbl$metadata[["geo"]] <- geo_metadata
 
   arrow::write_parquet(tbl, sink = dsn, ...)
+
+  invisible(obj)
 }
 
 
@@ -292,9 +296,11 @@ st_write_parquet <- function(obj, dsn, ...){
 #'   write to a Feather file using \code{\link[arrow]{write_feather}}. Geometry
 #'   columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 #'
-#' @param obj object of class \code{sf}
+#' @param obj object of class \code{\link[sf]{sf}}
 #' @param dsn data source name. A path and file name with .parquet extension
 #' @param ... additional options to pass to \code{\link[arrow]{write_feather}}
+#'
+#' @return \code{obj} invisibly
 #'
 #' @seealso \code{\link[arrow]{write_feather}}
 #'
@@ -325,6 +331,8 @@ st_write_feather <- function(obj, dsn, ...){
   tbl$metadata[["geo"]] <- geo_metadata
 
   arrow::write_feather(tbl, sink = dsn, ...)
+
+  invisible(obj)
 }
 
 
@@ -332,18 +340,22 @@ st_write_feather <- function(obj, dsn, ...){
 #'
 #' @param dataset a \code{Dataset} object created by \code{arrow::open_dataset}
 #'   or an \code{arrow_dplyr_query}
-#' @param find_geom logical. Only needed when using \code{select} to select a
-#'   subset of columns. Should all available geometry columns be added to to the
-#'   dataset query without being named in the query? Default is `FALSE`.
+#' @param find_geom logical. Only needed when returning a subset of columns.
+#'   Should all available geometry columns be selected and added to to the
+#'   dataset query without being named? Default is \code{FALSE} to require
+#'   geometry column(s) to be selected specifically.
 #'
 #' @details This function is primarily for use after opening a dataset with
 #'   \code{arrow::open_dataset}. Users can then query the \code{arrow Dataset}
-#'   using \code{dplyr} methods such as \code{filter} or \code{select}. Passing
-#'   the resulting query to this function will parse the datasets and create an
-#'   \code{sf} object. The function expects consistent geo metadata to be stored
-#'   with the dataset in order to create \code{sf} objects.
+#'   using \code{dplyr} methods such as \code{\link[dplyr]{filter}} or
+#'   \code{\link[dplyr]{select}}. Passing the resulting query to this function
+#'   will parse the datasets and create an \code{sf} object. The function
+#'   expects consistent geographic metadata to be stored with the dataset in
+#'   order to create \code{\link[sf]{sf}} objects.
 #'
-#' @seealso \code{\link[arrow]{open_dataset}}, \code{\link{st_read_parquet}}
+#' @return object of class \code{\link[sf]{sf}}
+#'
+#' @seealso \code{\link[arrow]{open_dataset}}, \code{\link[sf]{st_read}}, \code{\link{st_read_parquet}}
 #'
 #' @examples
 #' # read spatial object
@@ -410,7 +422,7 @@ read_sf_dataset <- function(dataset, find_geom = FALSE){
 
 #' Write \code{sf} object to an Arrow multi-file dataset
 #'
-#' @param obj object of class \code{sf}
+#' @param obj object of class \code{\link[sf]{sf}}
 #' @param path string path referencing a directory for the output
 #' @param format output file format ("parquet" or "feather")
 #' @param partitioning character vector of columns in \code{obj} for grouping or
@@ -421,7 +433,10 @@ read_sf_dataset <- function(dataset, find_geom = FALSE){
 #' @details Translate an \code{sf} spatial object to \code{data.frame} with WKB
 #'   geometry columns and then write to an \code{arrow} dataset with
 #'   partitioning. Allows for \code{dplyr} grouped datasets (using
-#'   \code{group_by}) and uses those variables to define partitions.
+#'   \code{\link[dplyr]{group_by}}) and uses those variables to define
+#'   partitions.
+#'
+#' @return \code{obj} invisibly
 #'
 #' @seealso \code{\link[arrow]{write_dataset}}, \code{\link{st_read_parquet}}
 #'
@@ -485,4 +500,6 @@ write_sf_dataset <- function(obj, path,
                        format = format,
                        partitioning = partitioning,
                        ...)
+
+  invisible(obj)
 }

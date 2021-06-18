@@ -16,7 +16,7 @@ st_read_feather(dsn, col_select = NULL, ...)
 \code{\link[arrow]{FeatherReader}}}
 }
 \value{
-object of class \code{sf}
+object of class \code{\link[sf]{sf}}
 }
 \description{
 Read a Feather file. Uses standard metadata information to
@@ -39,5 +39,5 @@ plot(sf::st_geometry(world))
 
 }
 \seealso{
-\code{\link[arrow]{read_feather}}
+\code{\link[arrow]{read_feather}}, \code{\link[sf]{st_read}}
 }

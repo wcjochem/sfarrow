@@ -79,7 +79,7 @@
 
       
 
-      </header><script src="example_sfarrow_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="example_sfarrow_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started examples</h1>
@@ -92,7 +92,7 @@
 
     
     
-<p><code>sfarrow</code> is designed to help read/write spatial vector data in “simple feature” format from/to Parquet files which maintaining coordinate reference system information. Essentially, this tool is attempting to connect data in <a href="https://r-spatial.github.io/sf/"><code>sf</code></a> and in <a href="https://arrow.apache.org/docs/r/"><code>arrow</code></a> and it relies on these packages for its internal work.</p>
+<p><code>sfarrow</code> is designed to help read/write spatial vector data in “simple feature” format from/to Parquet files while maintaining coordinate reference system information. Essentially, this tool is attempting to connect <code>R</code> objects in <a href="https://r-spatial.github.io/sf/"><code>sf</code></a> and in <a href="https://arrow.apache.org/docs/r/"><code>arrow</code></a> and it relies on these packages for its internal work.</p>
 <p>A key goal is to support interoperability of spatial data in Parquet files. R objects (including <code>sf</code>) can be written to files with <code>arrow</code>; however, these do not necessarily maintain the spatial information or can be read in by Python. <code>sfarrow</code> implements a metadata format also used by Python <code>GeoPandas</code>, described here: <a href="https://github.com/geopandas/geo-arrow-spec">https://github.com/geopandas/geo-arrow-spec</a>. Note that these metadata are not stable yet, and <code>sfarrow</code> will warn you that it may change.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install from devtools::install_github("wcjochem/sfarrow@main)</span>

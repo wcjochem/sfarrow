@@ -13,7 +13,7 @@ write_sf_dataset(
 )
 }
 \arguments{
-\item{obj}{object of class \code{sf}}
+\item{obj}{object of class \code{\link[sf]{sf}}}
 
 \item{path}{string path referencing a directory for the output}
 
@@ -25,6 +25,9 @@ the \code{dplyr::group_vars}}
 \item{...}{additional arguments and options passed to
 \code{arrow::write_dataset}}
 }
+\value{
+\code{obj} invisibly
+}
 \description{
 Write \code{sf} object to an Arrow multi-file dataset
 }
@@ -32,7 +35,8 @@ Write \code{sf} object to an Arrow multi-file dataset
 Translate an \code{sf} spatial object to \code{data.frame} with WKB
 geometry columns and then write to an \code{arrow} dataset with
 partitioning. Allows for \code{dplyr} grouped datasets (using
-\code{group_by}) and uses those variables to define partitions.
+\code{\link[dplyr]{group_by}}) and uses those variables to define
+partitions.
 }
 \examples{
 # read spatial object

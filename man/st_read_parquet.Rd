@@ -18,7 +18,7 @@ st_read_parquet(dsn, col_select = NULL, props = NULL, ...)
 \code{\link[arrow]{ParquetFileReader}}}
 }
 \value{
-object of class \code{sf}
+object of class \code{\link[sf]{sf}}
 }
 \description{
 Read a Parquet file. Uses standard metadata information to
@@ -41,5 +41,5 @@ plot(sf::st_geometry(world))
 
 }
 \seealso{
-\code{\link[arrow]{read_parquet}}
+\code{\link[arrow]{read_parquet}}, \code{\link[sf]{st_read}}
 }

@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 ```
 
 `sfarrow` is designed to help read/write spatial vector data in "simple feature"
-format from/to Parquet files which maintaining coordinate reference system
-information. Essentially, this tool is attempting to connect data in
+format from/to Parquet files while maintaining coordinate reference system
+information. Essentially, this tool is attempting to connect `R` objects in
 [`sf`](https://r-spatial.github.io/sf/) and in
 [`arrow`](https://arrow.apache.org/docs/r/) and it relies on these packages for
 its internal work.

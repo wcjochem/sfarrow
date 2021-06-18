@@ -15,13 +15,13 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfarrow: An R implementation to read/write  `sf` spatial objects from/to Parquet files
+# sfarrow: Read/Write Simple Feature Objects (`sf`) with 'Apache' 'Arrow'
 
-`sfarrow` is a package for reading and writing Parquet files with `sf` objects
-in `R`.
+`sfarrow` is a package for reading and writing Parquet and Feather files with
+`sf` objects using `arrow` in `R`.
 
 Simple features are a popular format for representing spatial vector data using
-`data.frames` and a list-like geometry column, implemented in the R package
+`data.frames` and a list-like geometry column, implemented in the `R` package
 [`sf`](https://r-spatial.github.io/sf/). Apache Parquet files are an
 open-source, column-oriented data storage format
 ([https://parquet.apache.org/](https://parquet.apache.org/)) which enable

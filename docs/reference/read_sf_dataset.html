@@ -144,23 +144,28 @@ or an <code>arrow_dplyr_query</code></p></td>
     </tr>
     <tr>
       <th>find_geom</th>
-      <td><p>logical. Only needed when using <code>select</code> to select a
-subset of columns. Should all available geometry columns be added to to the
-dataset query without being named in the query? Default is <code>FALSE</code>.</p></td>
+      <td><p>logical. Only needed when returning a subset of columns.
+Should all available geometry columns be selected and added to to the
+dataset query without being named? Default is <code>FALSE</code> to require
+geometry column(s) to be selected specifically.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>object of class <code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is primarily for use after opening a dataset with
 <code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>arrow::open_dataset</a></code>. Users can then query the <code>arrow Dataset</code>
-using <code>dplyr</code> methods such as <code>filter</code> or <code>select</code>. Passing
-the resulting query to this function will parse the datasets and create an
-<code>sf</code> object. The function expects consistent geo metadata to be stored
-with the dataset in order to create <code>sf</code> objects.</p>
+using <code>dplyr</code> methods such as <code><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></code> or
+<code><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></code>. Passing the resulting query to this function
+will parse the datasets and create an <code>sf</code> object. The function
+expects consistent geographic metadata to be stored with the dataset in
+order to create <code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code> objects.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></code>, <code><a href='st_read_parquet.html'>st_read_parquet</a></code></p></div>
+    <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/open_dataset.html'>open_dataset</a></code>, <code><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></code>, <code><a href='st_read_parquet.html'>st_read_parquet</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># read spatial object</span>
