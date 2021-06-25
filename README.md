@@ -26,13 +26,19 @@ the future.
 
 ## Installation
 
-Installation of the `sfarrow` package is through Github:
+`sfarrow` is available through CRAN with:
+
+``` r
+install.packages('sfarrow')
+```
+
+or it can be installed from Github with:
 
 ``` r
 devtools::install_github("wcjochem/sfarrow@main")
 ```
 
-Load the library to begin using
+Load the library to begin using it.
 
 ``` r
 library(sfarrow)
@@ -89,7 +95,7 @@ world
 plot(sf::st_geometry(world))
 ```
 
-<img src="man/figures/REAsDME-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/REAsDME-unnamed-chunk-4-1.png" width="100%" />
 
 Writing `sf` objects to Parquet format files. These Parquet files
 created with `sfarrow` can be read within Python using `GeoPandas`.
@@ -140,7 +146,7 @@ nc_p
 plot(sf::st_geometry(nc_p))
 ```
 
-<img src="man/figures/REAsDME-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/REAsDME-unnamed-chunk-5-1.png" width="100%" />
 
 For additional examples please see the vignettes.
 

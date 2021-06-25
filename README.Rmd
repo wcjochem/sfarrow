@@ -40,13 +40,20 @@ may change in the future.
 
 ## Installation
 
-Installation of the `sfarrow` package is through Github:
+`sfarrow` is available through CRAN with:
+
+```{r, eval=FALSE}
+install.packages('sfarrow')
+```
+
+or it can be installed from Github with: 
 
 ```{r eval=FALSE}
 devtools::install_github("wcjochem/sfarrow@main")
 ```
 
-Load the library to begin using
+Load the library to begin using it.
+
 ```{r}
 library(sfarrow)
 ```

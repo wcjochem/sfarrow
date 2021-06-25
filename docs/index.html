@@ -90,11 +90,14 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Installation of the <code>sfarrow</code> package is through Github:</p>
+<p><code>sfarrow</code> is available through CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"wcjochem/sfarrow@main"</span><span class="op">)</span></code></pre></div>
-<p>Load the library to begin using</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'sfarrow'</span><span class="op">)</span></code></pre></div>
+<p>or it can be installed from Github with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"wcjochem/sfarrow@main"</span><span class="op">)</span></code></pre></div>
+<p>Load the library to begin using it.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wcjochem/sfarrow">sfarrow</a></span><span class="op">)</span></code></pre></div>
 <div id="arrow-package" class="section level3">
 <h3 class="hasAnchor">
@@ -106,7 +109,7 @@
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <p>Reading Parquet data of spatial files created with Python <code>GeoPandas</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load Natural Earth low-res dataset. </span>
 <span class="co"># Created in Python with geopandas.to_parquet()</span>
 <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"world.parquet"</span>, package <span class="op">=</span> <span class="st">"sfarrow"</span><span class="op">)</span>
@@ -143,9 +146,9 @@
 <span class="co">#&gt; 9  MULTIPOLYGON (((141.0002 -2...</span>
 <span class="co">#&gt; 10 MULTIPOLYGON (((-68.63401 -...</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/REAsDME-unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="reference/figures/REAsDME-unnamed-chunk-4-1.png" width="100%"></p>
 <p>Writing <code>sf</code> objects to Parquet format files. These Parquet files created with <code>sfarrow</code> can be read within Python using <code>GeoPandas</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/st_write_parquet.html">st_write_parquet</a></span><span class="op">(</span>obj<span class="op">=</span><span class="va">nc</span>, dsn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"nc.parquet"</span><span class="op">)</span><span class="op">)</span>
@@ -189,7 +192,7 @@
 <span class="co">#&gt; 9      748  1190     2     844 MULTIPOLYGON (((-78.30876 3...</span>
 <span class="co">#&gt; 10     160  2038     5     176 MULTIPOLYGON (((-80.02567 3...</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc_p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/REAsDME-unnamed-chunk-4-1.png" width="100%"></p>
+<p><img src="reference/figures/REAsDME-unnamed-chunk-5-1.png" width="100%"></p>
 <p>For additional examples please see the vignettes.</p>
 </div>
 <div id="contributions" class="section level2">
@@ -209,6 +212,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=sfarrow">https://​cloud.r-project.org/​package=sfarrow</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/wcjochem/sfarrow/">https://​github.com/​wcjochem/​sfarrow/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/wcjochem/sfarrow/issues">https://​github.com/​wcjochem/​sfarrow/​issues</a>
