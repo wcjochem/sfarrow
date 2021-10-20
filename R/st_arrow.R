@@ -259,13 +259,19 @@ st_read_feather <- function(dsn, col_select = NULL, ...){
 #' @seealso \code{\link[arrow]{write_parquet}}
 #'
 #' @examples
+#' # read spatial object
 #' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 #'
-#' st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
+#' # create temp file
+#' tf <- tempfile(fileext = '.parquet')
+#' on.exit(unlink(tf))
+#'
+#' # write out object
+#' st_write_parquet(obj = nc, dsn = tf)
 #'
 #' # In Python, read the new file with geopandas.read_parquet(...)
-#'
-#' nc_p <- st_read_parquet(file.path(tempdir(), "nc.parquet"))
+#' # read back into R
+#' nc_p <- st_read_parquet(tf)
 #'
 #' @export
 st_write_parquet <- function(obj, dsn, ...){
@@ -305,13 +311,19 @@ st_write_parquet <- function(obj, dsn, ...){
 #' @seealso \code{\link[arrow]{write_feather}}
 #'
 #' @examples
+#' # read spatial object
 #' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 #'
-#' st_write_feather(obj=nc, dsn=file.path(tempdir(), "nc.feather"))
+#' # create temp file
+#' tf <- tempfile(fileext = '.feather')
+#' on.exit(unlink(tf))
+#'
+#' # write out object
+#' st_write_feather(obj = nc, dsn = tf)
 #'
 #' # In Python, read the new file with geopandas.read_feather(...)
-#'
-#' nc_f <- st_read_feather(file.path(tempdir(), "nc.feather"))
+#' # read back into R
+#' nc_f <- st_read_feather(tf)
 #'
 #' @export
 st_write_feather <- function(obj, dsn, ...){
@@ -368,13 +380,15 @@ st_write_feather <- function(obj, dsn, ...){
 #' nc_g <- dplyr::group_by(nc, group)
 #'
 #' # write out to parquet datasets
+#' tf <- tempfile()  # create temporary location
+#' on.exit(unlink(tf))
 #' # partitioning determined by dplyr 'group_vars'
-#' write_sf_dataset(nc_g, path = file.path(tempdir(), "ds"))
+#' write_sf_dataset(nc_g, path = tf)
 #'
-#' list.files(file.path(tempdir(), "ds"), recursive = TRUE)
+#' list.files(tf, recursive = TRUE)
 #'
 #' # open parquet files from dataset
-#' ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
+#' ds <- arrow::open_dataset(tf)
 #'
 #' # create a query. %>% also allowed
 #' q <- dplyr::filter(ds, group == 1)
@@ -451,13 +465,15 @@ read_sf_dataset <- function(dataset, find_geom = FALSE){
 #' nc_g <- dplyr::group_by(nc, group)
 #'
 #' # write out to parquet datasets
+#' tf <- tempfile()  # create temporary location
+#' on.exit(unlink(tf))
 #' # partitioning determined by dplyr 'group_vars'
-#' write_sf_dataset(nc_g, path = file.path(tempdir(), "ds"))
+#' write_sf_dataset(nc_g, path = tf)
 #'
-#' list.files(file.path(tempdir(), "ds"), recursive = TRUE)
+#' list.files(tf, recursive = TRUE)
 #'
 #' # open parquet files from dataset
-#' ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
+#' ds <- arrow::open_dataset(tf)
 #'
 #' # create a query. %>% also allowed
 #' q <- dplyr::filter(ds, group == 1)
