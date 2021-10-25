@@ -49,13 +49,15 @@ nc$group <- sample(1:3, nrow(nc), replace = TRUE)
 nc_g <- dplyr::group_by(nc, group)
 
 # write out to parquet datasets
+tf <- tempfile()  # create temporary location
+on.exit(unlink(tf))
 # partitioning determined by dplyr 'group_vars'
-write_sf_dataset(nc_g, path = file.path(tempdir(), "ds"))
+write_sf_dataset(nc_g, path = tf)
 
-list.files(file.path(tempdir(), "ds"), recursive = TRUE)
+list.files(tf, recursive = TRUE)
 
 # open parquet files from dataset
-ds <- arrow::open_dataset(file.path(tempdir(), "ds"))
+ds <- arrow::open_dataset(tf)
 
 # create a query. \%>\% also allowed
 q <- dplyr::filter(ds, group == 1)
