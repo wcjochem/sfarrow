@@ -1,3 +1,8 @@
+# sfarrow 0.4.1
+
+* Cleaning examples to remove reverse dependency check errors in `arrow`
+(reported by @jonkeane).
+
 # sfarrow 0.4.0
 
 * New `find_geom` parameter in `read_sf_dataset()` adds any geometry columns to
