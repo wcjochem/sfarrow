@@ -1,7 +1,7 @@
 Package: sfarrow
 Title: Read/Write Simple Feature Objects ('sf') with 'Apache' 'Arrow'
-Version: 0.4.0
-Date: 2021-06-17
+Version: 0.4.1
+Date: 2021-10-25
 Authors@R: 
     person(given = "Chris",
            family = "Jochem",

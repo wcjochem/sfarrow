@@ -74,7 +74,7 @@ columns (type sfc) are converted to well-known binary (WKB) format." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfarrow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -163,9 +163,15 @@ columns (type <code>sfc</code>) are converted to well-known binary (WKB) format.
     <div class='dont-index'><p><code><a href='https://arrow.apache.org/docs/r//reference/write_parquet.html'>write_parquet</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># read spatial object</span>
+<span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>st_write_parquet</span><span class='op'>(</span>obj<span class='op'>=</span><span class='va'>nc</span>, dsn<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"nc.parquet"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># create temp file</span>
+<span class='va'>tf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>'.parquet'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/on.exit.html'>on.exit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>tf</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># write out object</span>
+<span class='fu'>st_write_parquet</span><span class='op'>(</span>obj <span class='op'>=</span> <span class='va'>nc</span>, dsn <span class='op'>=</span> <span class='va'>tf</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: This is an initial implementation of Parquet/Feather file support and</span>
 #&gt; <span class='warning'>geo metadata. This is tracking version 0.1.0 of the metadata</span>
 #&gt; <span class='warning'>(https://github.com/geopandas/geo-arrow-spec). This metadata</span>
@@ -173,8 +179,8 @@ columns (type <code>sfc</code>) are converted to well-known binary (WKB) format.
 #&gt; <span class='warning'>do not yet recommend using this in a production setting unless you are</span>
 #&gt; <span class='warning'>able to rewrite your Parquet/Feather files.</span></div><div class='input'>
 <span class='co'># In Python, read the new file with geopandas.read_parquet(...)</span>
-
-<span class='va'>nc_p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read_parquet.html'>st_read_parquet</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"nc.parquet"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># read back into R</span>
+<span class='va'>nc_p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read_parquet.html'>st_read_parquet</a></span><span class='op'>(</span><span class='va'>tf</span><span class='op'>)</span>
 
 </div></pre>
   </div>

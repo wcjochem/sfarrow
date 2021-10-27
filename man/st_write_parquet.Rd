@@ -22,13 +22,19 @@ write to a Parquet file using \code{\link[arrow]{write_parquet}}. Geometry
 columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 }
 \examples{
+# read spatial object
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
-st_write_parquet(obj=nc, dsn=file.path(tempdir(), "nc.parquet"))
+# create temp file
+tf <- tempfile(fileext = '.parquet')
+on.exit(unlink(tf))
+
+# write out object
+st_write_parquet(obj = nc, dsn = tf)
 
 # In Python, read the new file with geopandas.read_parquet(...)
-
-nc_p <- st_read_parquet(file.path(tempdir(), "nc.parquet"))
+# read back into R
+nc_p <- st_read_parquet(tf)
 
 }
 \seealso{

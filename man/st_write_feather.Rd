@@ -22,13 +22,19 @@ write to a Feather file using \code{\link[arrow]{write_feather}}. Geometry
 columns (type \code{sfc}) are converted to well-known binary (WKB) format.
 }
 \examples{
+# read spatial object
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
-st_write_feather(obj=nc, dsn=file.path(tempdir(), "nc.feather"))
+# create temp file
+tf <- tempfile(fileext = '.feather')
+on.exit(unlink(tf))
+
+# write out object
+st_write_feather(obj = nc, dsn = tf)
 
 # In Python, read the new file with geopandas.read_feather(...)
-
-nc_f <- st_read_feather(file.path(tempdir(), "nc.feather"))
+# read back into R
+nc_f <- st_read_feather(tf)
 
 }
 \seealso{
