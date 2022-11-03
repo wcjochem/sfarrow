@@ -1,38 +1,55 @@
 #' Create standardised geo metadata for Parquet files
 #'
 #' @param df object of class \code{sf}
+#' @param schema_version string for GeoParquet specification version
 #'
 #' @details Reference for metadata standard:
-#'   \url{https://github.com/geopandas/geo-arrow-spec}. This is compatible with
+#'   https://github.com/opengeospatial/geoparquet. This is compatible with
 #'   \code{GeoPandas} Parquet files.
 #'
 #' @return JSON formatted list with geo-metadata
 #' @keywords internal
-create_metadata <- function(df){
+create_metadata <- function(df, schema_version = c('0.4.0', '0.1.0')){
   warning(strwrap("This is an initial implementation of Parquet/Feather file support
-                  and geo metadata. This is tracking version 0.1.0 of the metadata
-                  (https://github.com/geopandas/geo-arrow-spec). This metadata
+                  and geo metadata. This is tracking version 0.4.0 of the metadata
+                  (https://github.com/opengeospatial/geoparquet). This metadata
                   specification may change and does not yet make stability promises.
                   We do not yet recommend using this in a production setting unless
                   you are able to rewrite your Parquet/Feather files.",
                   prefix = "\n", initial = ""
          ), call.=FALSE)
 
-  # reference: https://github.com/geopandas/geo-arrow-spec
+  # validate inputs
+  schema_version <- match.arg(schema_version)
+
+  # reference: https://github.com/opengeospatial/geoparquet
   geom_cols <- lapply(df, function(i) inherits(i, "sfc"))
   geom_cols <- names(which(geom_cols==TRUE))
-  col_meta <- list()
+  col_meta <- list()  # column metadata
 
   for(col in geom_cols){
-    col_meta[[col]] <- list(crs = sf::st_crs(df[[col]])$wkt,
-                            encoding = "WKB",
-                            bbox = as.numeric(sf::st_bbox(df[[col]])))
+    geom <- df[[col]]
+
+    geom_types <- unique(na.rm(sf::st_geometry_type(geom)))
+
+    if(!is.na(sf::st_crs(geom))){
+      if(schema_version == '0.1.0'){
+        crs <- sf::st_as_text(sf::st_crs(geom))
+      } else{
+        crs <- sf::st_as_text(sf::st_crs(geom), projjson = TRUE)
+      }
+    }
+
+    col_meta[[col]] <- list(encoding = "WKB",
+                            crs = crs,
+                            geometry_type = geom_types,
+                            bbox = as.numeric(sf::st_bbox(geom)))
   }
 
   geo_metadata <- list(primary_column = attr(df, "sf_column"),
                        columns = col_meta,
-                       schema_version = "0.1.0",
-                       creator = list(library="sfarrow"))
+                       version = schema_version,
+                       creator = list(library = "sfarrow", version='0.5.0'))
 
   return(jsonlite::toJSON(geo_metadata, auto_unbox=TRUE))
 }
